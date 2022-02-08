@@ -12,19 +12,19 @@ pipeline {
 
     stage('Checkout Source Code') {
       steps {
-        git 'https://github.com/chetangautamm/helm-k8s-deployment.git'
+        git 'https://github.com/chetangautamm/arck8s.git'
       }
     }
 
 
    stage('Deploying Opensips CNF on Kubespray') {
       steps {
-        sshagent(['k8suser']) {
+        sshagent(['kubeadm']) {
           script {
             try {
-              sh "ssh k8suser@52.172.221.4 kubectl apply -f opensips.yaml
+              sh "ssh kubeadm@20.193.238.113 kubectl apply -f opensips.yaml
             }catch(error){
-              sh "ssh k8suser@52.172.221.4 kubectl apply -f opensips.yaml
+              sh "ssh kubeadm@20.193.238.113 kubectl apply -f opensips.yaml
             }
           }
         }
@@ -33,11 +33,11 @@ pipeline {
     stage('Validating Opensips Using SIPp on Kubespray'') {
       steps {
         sh "chmod +x configure.sh"
-        sshagent(['k8suser']) {
-          sh "scp -o StrictHostKeyChecking=no -q configure.sh k8suser@52.172.221.4:/home/k8suser"
+        sshagent(['kubeadm']) {
+          sh "scp -o StrictHostKeyChecking=no -q configure.sh kubeadm@20.193.238.113:/home/kubeadm"
           script {
             sh "sleep 10"
-            sh "ssh k8suser@52.172.221.4 ./configure.sh"
+            sh "ssh kubeadm@20.193.238.113 ./configure.sh"
           }
         }
       }
