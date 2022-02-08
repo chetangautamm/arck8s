@@ -1,0 +1,72 @@
+pipeline {
+
+  environment {
+    registry = "chetangautamm/repo"
+    registryCredential = '58881f31-29bb-48a8-9da9-fc254654146d'
+    dockerImage = ""
+  }
+
+  agent any
+
+  stages {
+
+    stage('Checkout Source Code') {
+      steps {
+        git 'https://github.com/chetangautamm/helm-k8s-deployment.git'
+      }
+    }
+
+
+   stage('Deploying Opensips CNF on Kubespray') {
+      steps {
+        sshagent(['k8suser']) {
+          script {
+            try {
+              sh "ssh k8suser@52.172.221.4 kubectl apply -f opensips.yaml
+            }catch(error){
+              sh "ssh k8suser@52.172.221.4 kubectl apply -f opensips.yaml
+            }
+          }
+        }
+      }
+    }
+    stage('Validating Opensips Using SIPp on Kubespray'') {
+      steps {
+        sh "chmod +x configure.sh"
+        sshagent(['k8suser']) {
+          sh "scp -o StrictHostKeyChecking=no -q configure.sh k8suser@52.172.221.4:/home/k8suser"
+          script {
+            sh "sleep 10"
+            sh "ssh k8suser@52.172.221.4 ./configure.sh"
+          }
+        }
+      }
+    }
+   stage('Deploying Opensips CNF  on KIND') {
+      steps {
+        sshagent(['kind']) {
+          script {
+            try {
+              sh "ssh ubuntu@3.111.23.250 kubectl apply -f opensips.yaml
+            }catch(error){
+              sh "ssh ubuntu@3.111.23.250 kubectl apply -f opensips.yaml
+            }
+          }
+        }
+      }
+    }
+
+   stage('Validating Opensips Using SIPp on KIND') {
+      steps {
+        sh "chmod +x configure.sh"
+        sshagent(['kind']) {
+          sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@3.111.23.250:/home/ubuntu"
+          script {
+            sh "sleep 10"
+            sh "ssh ubuntu@3.111.23.250 ./configure.sh"
+          }
+        }
+      }
+    }
+  }
+}
