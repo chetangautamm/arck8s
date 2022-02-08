@@ -1,0 +1,77 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensips-deployment-yaml
+  labels:
+    app: opensips
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensips
+  template:
+    metadata:
+      labels:
+        app: opensips
+    spec:
+      containers:
+      - name: opensips
+        image: chetangautamm/repo:Opensips_Build
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5060
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 10; done;" ]
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uas-deployment-yaml
+  labels:
+    app: uas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uas
+  template:
+    metadata:
+      labels:
+        app: uas
+    spec:
+      containers:
+      - name: uas
+        image: chetangautamm/repo:sipp.v3
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5060
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 10; done;" ]
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uac-deployment-yaml
+  labels:
+    app: uac
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uac
+  template:
+    metadata:
+      labels:
+        app: uac
+    spec:
+      containers:
+      - name: uac
+        image: chetangautamm/repo:sipp.v3
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5060
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 10; done;" ]
