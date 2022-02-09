@@ -201,20 +201,14 @@ pipeline {
 
    stage("Service Account Token Authentication:KUBEADM(AZURE)"){
      steps{
+       sh "chmod +x token.sh"
        sshagent(['kubeadm']){
+         sh "scp -o StrictHostKeyChecking=no -q token.sh kubeadm@20.193.238.113:/home/kubeadm/"
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 kubectl create serviceaccount admin-user"
-             sh "ssh kubeadm@20.193.238.113 kubectl create clusterrolebinding admin-user-binding --clusterrole cluster-admin --serviceaccount default:admin-user"
-             sh "ssh kubeadm@20.193.238.113 SECRET_NAME=$(kubectl get serviceaccount admin-user -o jsonpath='{$.secrets[0].name}')"
-             sh "ssh kubeadm@20.193.238.113 TOKEN=$(kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 -d | sed $'s/$/\\\n/g')"
-             sh "ssh kubeadm@20.193.238.113 echo $TOKEN > token.yml"
+             sh "ssh kubeadm@20.193.238.113 ./token.sh"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 kubectl create serviceaccount admin-user"
-             sh "ssh kubeadm@20.193.238.113 kubectl create clusterrolebinding admin-user-binding --clusterrole cluster-admin --serviceaccount default:admin-user"
-             sh "ssh kubeadm@20.193.238.113 SECRET_NAME=$(kubectl get serviceaccount admin-user -o jsonpath='{$.secrets[0].name}')"
-             sh "ssh kubeadm@20.193.238.113 TOKEN=$(kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 -d | sed $'s/$/\\\n/g')"
-             sh "ssh kubeadm@20.193.238.113 echo $TOKEN > token.yml"
+             sh "ssh kubeadm@20.193.238.113 ./token.sh"
            }
          }
        }
@@ -223,20 +217,14 @@ pipeline {
 
    stage("Service Account Token Authentication:KIND(AWS)"){
      steps{
+       sh "chmod +x token.sh"
        sshagent(['kind']){
+         sh "scp -o StrictHostKeyChecking=no -q token.sh ubuntu@3.111.23.250:/home/ubuntu/"
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 kubectl create serviceaccount admin-user"
-             sh "ssh ubuntu@3.111.23.250 kubectl create clusterrolebinding admin-user-binding --clusterrole cluster-admin --serviceaccount default:admin-user"
-             sh "ssh ubuntu@3.111.23.250 SECRET_NAME=$(kubectl get serviceaccount admin-user -o jsonpath='{$.secrets[0].name}')"
-             sh "ssh ubuntu@3.111.23.250 TOKEN=$(kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 -d | sed $'s/$/\\\n/g')"
-             sh "ssh ubuntu@3.111.23.250 echo $TOKEN > token.yml"
+             sh "ssh ubuntu@3.111.23.250 ./token.sh"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 kubectl create serviceaccount admin-user"
-             sh "ssh ubuntu@3.111.23.250 kubectl create clusterrolebinding admin-user-binding --clusterrole cluster-admin --serviceaccount default:admin-user"
-             sh "ssh ubuntu@3.111.23.250 SECRET_NAME=$(kubectl get serviceaccount admin-user -o jsonpath='{$.secrets[0].name}')"
-             sh "ssh ubuntu@3.111.23.250 TOKEN=$(kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 -d | sed $'s/$/\\\n/g')"
-             sh "ssh ubuntu@3.111.23.250 echo $TOKEN > token.yml"
+             sh "ssh ubuntu@3.111.23.250 ./token.sh"
            }
          }
        }
