@@ -148,9 +148,9 @@ pipeline {
        sshagent(['kubeadm']){
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 az group create --name kubeadm(azure) --location EastUS --output table"
+             sh "ssh kubeadm@20.193.238.113 az group create --name kubeadm_azure --location EastUS --output table"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 az group create --name kubeadm(azure) --location EastUS --output table"
+             sh "ssh kubeadm@20.193.238.113 az group create --name kubeadm_azure --location EastUS --output table"
            }
          }
        }
@@ -162,9 +162,9 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 az group create --name kind(aws) --location EastUS --output table"
+             sh "ssh ubuntu@3.111.23.250 az group create --name kind_aws --location EastUS --output table"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 az group create --name kind(aws) --location EastUS --output table"
+             sh "ssh ubuntu@3.111.23.250 az group create --name kind_aws --location EastUS --output table"
            }
          }
        }
@@ -176,9 +176,9 @@ pipeline {
        sshagent(['kubeadm']){
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 az connectedk8s connect --name Edge_Site-1 --resource-group kubeadm(azure)"
+             sh "ssh kubeadm@20.193.238.113 az connectedk8s connect --name Edge_Site-1 --resource-group kubeadm_azure"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 az connectedk8s connect --name Edge_Site-1 --resource-group kubeadm(azure)"
+             sh "ssh kubeadm@20.193.238.113 az connectedk8s connect --name Edge_Site-1 --resource-group kubeadm_azure"
            }
          }
        }
@@ -190,9 +190,9 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 az connectedk8s connect --name Edge_Site-2 --resource-group kind(aws)"
+             sh "ssh ubuntu@3.111.23.250 az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 az connectedk8s connect --name Edge_Site-2 --resource-group kind(aws)"
+             sh "ssh ubuntu@3.111.23.250 az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
            }
          }
        }
