@@ -15,22 +15,252 @@ pipeline {
         git 'https://github.com/chetangautamm/arck8s.git'
       }
     }
+   stage("Azure Cli:KUBEADM(AZURE)"){
+     steps{
+       sshagent(['kubeadm']){
+         script{
+           try{
+             sh "ssh kubeadm@20.193.238.113 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+           }catch(error){
+             sh "ssh kubeadm@20.193.238.113 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+           }
+         }
+       }
+     }
+   }
 
+   stage("Azure Cli:KIND(AWS)"){
+     steps{
+       sshagent(['kind']){
+         script{
+           try{
+             sh "ssh ubuntu@3.111.23.250 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+           }catch(error){
+             sh "ssh ubuntu@3.111.23.250 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+           }
+         }
+       }
+     }
+   }
 
-   stage('Deploying Opensips CNF on Kubespray') {
+   stage("Connectedk8s Extension:KUBEADM(AZURE)"){
+     steps{
+       sshagent(['kubeadm']){
+         script{
+           try{
+             sh "ssh kubeadm@20.193.238.113 az extension add --name connectedk8s"
+           }catch(error){
+             sh "ssh kubeadm@20.193.238.113 az extension add --name connectedk8s"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Connectedk8s Extension:KIND(AWS)"){
+     steps{
+       sshagent(['kind']){
+         script{
+           try{
+             sh "ssh ubuntu@3.111.23.250 az extension add --name connectedk8s"
+           }catch(error){
+             sh "ssh ubuntu@3.111.23.250 az extension add --name connectedk8s"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Register Arc Providers:KUBEADM(AZURE)"){
+     steps{
+       sshagent(['kubeadm']){
+         script{
+           try{
+             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.ExtendedLocation"
+           }catch(error){
+             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.ExtendedLocation"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Register Arc Providers:KIND(AWS)"){
+     steps{
+       sshagent(['kind']){
+         script{
+           try{
+             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.ExtendedLocation"
+           }catch(error){
+             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.ExtendedLocation"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Verify Arc Providers:KUBEADM(AZURE)"){
+     steps{
+       sshagent(['kubeadm']){
+         script{
+           try{
+             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.ExtendedLocation -o table"
+           }catch(error){
+             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.ExtendedLocation -o table"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Verify Arc Providers:KIND(AWS)"){
+     steps{
+       sshagent(['kind']){
+         script{
+           try{
+             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.ExtendedLocation -o table"
+           }catch(error){
+             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.ExtendedLocation -o table"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Create Resource Group:KUBEADM(AZURE)"){
+     steps{
+       sshagent(['kubeadm']){
+         script{
+           try{
+             sh "ssh kubeadm@20.193.238.113 az group create --name kubeadm(azure) --location EastUS --output table"
+           }catch(error){
+             sh "ssh kubeadm@20.193.238.113 az group create --name kubeadm(azure) --location EastUS --output table"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Create Resource Group:KIND(AWS)"){
+     steps{
+       sshagent(['kind']){
+         script{
+           try{
+             sh "ssh ubuntu@3.111.23.250 az group create --name kind(aws) --location EastUS --output table"
+           }catch(error){
+             sh "ssh ubuntu@3.111.23.250 az group create --name kind(aws) --location EastUS --output table"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Connect Existing K8s:KUBEADM(AZURE)"){
+     steps{
+       sshagent(['kubeadm']){
+         script{
+           try{
+             sh "ssh kubeadm@20.193.238.113 az connectedk8s connect --name Edge_Site-1 --resource-group kubeadm(azure)"
+           }catch(error){
+             sh "ssh kubeadm@20.193.238.113 az connectedk8s connect --name Edge_Site-1 --resource-group kubeadm(azure)"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Connect Existing K8s:KIND(AWS)"){
+     steps{
+       sshagent(['kind']){
+         script{
+           try{
+             sh "ssh ubuntu@3.111.23.250 az connectedk8s connect --name Edge_Site-2 --resource-group kind(aws)"
+           }catch(error){
+             sh "ssh ubuntu@3.111.23.250 az connectedk8s connect --name Edge_Site-2 --resource-group kind(aws)"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Service Account Token Authentication:KUBEADM(AZURE)"){
+     steps{
+       sshagent(['kubeadm']){
+         script{
+           try{
+             sh "ssh kubeadm@20.193.238.113 kubectl create serviceaccount admin-user"
+             sh "ssh kubeadm@20.193.238.113 kubectl create clusterrolebinding admin-user-binding --clusterrole cluster-admin --serviceaccount default:admin-user"
+             sh "ssh kubeadm@20.193.238.113 SECRET_NAME=$(kubectl get serviceaccount admin-user -o jsonpath='{$.secrets[0].name}')"
+             sh "ssh kubeadm@20.193.238.113 TOKEN=$(kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 -d | sed $'s/$/\\\n/g')"
+             sh "ssh kubeadm@20.193.238.113 echo $TOKEN > token.yml"
+           }catch(error){
+             sh "ssh kubeadm@20.193.238.113 kubectl create serviceaccount admin-user"
+             sh "ssh kubeadm@20.193.238.113 kubectl create clusterrolebinding admin-user-binding --clusterrole cluster-admin --serviceaccount default:admin-user"
+             sh "ssh kubeadm@20.193.238.113 SECRET_NAME=$(kubectl get serviceaccount admin-user -o jsonpath='{$.secrets[0].name}')"
+             sh "ssh kubeadm@20.193.238.113 TOKEN=$(kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 -d | sed $'s/$/\\\n/g')"
+             sh "ssh kubeadm@20.193.238.113 echo $TOKEN > token.yml"
+           }
+         }
+       }
+     }
+   }
+
+   stage("Service Account Token Authentication:KIND(AWS)"){
+     steps{
+       sshagent(['kind']){
+         script{
+           try{
+             sh "ssh ubuntu@3.111.23.250 kubectl create serviceaccount admin-user"
+             sh "ssh ubuntu@3.111.23.250 kubectl create clusterrolebinding admin-user-binding --clusterrole cluster-admin --serviceaccount default:admin-user"
+             sh "ssh ubuntu@3.111.23.250 SECRET_NAME=$(kubectl get serviceaccount admin-user -o jsonpath='{$.secrets[0].name}')"
+             sh "ssh ubuntu@3.111.23.250 TOKEN=$(kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 -d | sed $'s/$/\\\n/g')"
+             sh "ssh ubuntu@3.111.23.250 echo $TOKEN > token.yml"
+           }catch(error){
+             sh "ssh ubuntu@3.111.23.250 kubectl create serviceaccount admin-user"
+             sh "ssh ubuntu@3.111.23.250 kubectl create clusterrolebinding admin-user-binding --clusterrole cluster-admin --serviceaccount default:admin-user"
+             sh "ssh ubuntu@3.111.23.250 SECRET_NAME=$(kubectl get serviceaccount admin-user -o jsonpath='{$.secrets[0].name}')"
+             sh "ssh ubuntu@3.111.23.250 TOKEN=$(kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 -d | sed $'s/$/\\\n/g')"
+             sh "ssh ubuntu@3.111.23.250 echo $TOKEN > token.yml"
+           }
+         }
+       }
+     }
+   }
+
+   stage('Deploy Opensips:KUBEADM(AZURE) ') {
       steps {
         sshagent(['kubeadm']) {
           script {
             try {
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml kubeadm@20.193.238.113:/home/kubeadm/"
+              sh "sleep 2"
               sh "ssh kubeadm@20.193.238.113 kubectl apply -f opensips.yaml"
             }catch(error){
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml kubeadm@20.193.238.113:/home/kubeadm/"
+              sh "sleep 2"
               sh "ssh kubeadm@20.193.238.113 kubectl apply -f opensips.yaml"
             }
           }
         }
       }
     }
-    stage('Validating Opensips Using SIPp on Kubespray') {
+    stage('Validate Opensips:KUBEADM(AZURE)') {
       steps {
         sh "chmod +x configure.sh"
         sshagent(['kubeadm']) {
@@ -42,13 +272,17 @@ pipeline {
         }
       }
     }
-   stage('Deploying Opensips CNF  on KIND') {
+   stage('Deploy Opensips:KIND(AWS)') {
       steps {
         sshagent(['kind']) {
           script {
             try {
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@3.111.23.250:/home/ubuntu/"
+              sh "sleep 2"
               sh "ssh ubuntu@3.111.23.250 kubectl apply -f opensips.yaml"
             }catch(error){
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@3.111.23.250:/home/ubuntu/"
+              sh "sleep 2"
               sh "ssh ubuntu@3.111.23.250 kubectl apply -f opensips.yaml"
             }
           }
@@ -56,7 +290,7 @@ pipeline {
       }
     }
 
-   stage('Validating Opensips Using SIPp on KIND') {
+   stage('Validate Opensips:KIND(AWS)') {
       steps {
         sh "chmod +x configure.sh"
         sshagent(['kind']) {
