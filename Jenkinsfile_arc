@@ -254,7 +254,7 @@ pipeline {
         sshagent(['kubeadm']) {
           sh "scp -o StrictHostKeyChecking=no -q configure.sh kubeadm@20.193.238.113:/home/kubeadm"
           script {
-            sh "sleep 10"
+            sh "sleep 20"
             sh "ssh kubeadm@20.193.238.113 ./configure.sh"
           }
         }
@@ -284,7 +284,7 @@ pipeline {
         sshagent(['kind']) {
           sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@3.111.23.250:/home/ubuntu"
           script {
-            sh "sleep 10"
+            sh "sleep 30"
             sh "ssh ubuntu@3.111.23.250 ./configure.sh"
           }
         }
