@@ -34,9 +34,9 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "ssh ubuntu@3.110.159.249 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "ssh ubuntu@3.110.159.249 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }
          }
        }
@@ -62,9 +62,9 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 az extension add --name connectedk8s"
+             sh "ssh ubuntu@3.110.159.249 az extension add --name connectedk8s"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 az extension add --name connectedk8s"
+             sh "ssh ubuntu@3.110.159.249 az extension add --name connectedk8s"
            }
          }
        }
@@ -94,13 +94,13 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.Kubernetes"
-             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.ExtendedLocation"
+             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.ExtendedLocation"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.Kubernetes"
-             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "ssh ubuntu@3.111.23.250 az provider register --namespace Microsoft.ExtendedLocation"
+             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.ExtendedLocation"
            }
          }
        }
@@ -130,13 +130,13 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.Kubernetes -o table"
-             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.ExtendedLocation -o table"
+             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.ExtendedLocation -o table"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.Kubernetes -o table"
-             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "ssh ubuntu@3.111.23.250 az provider show -n Microsoft.ExtendedLocation -o table"
+             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.ExtendedLocation -o table"
            }
          }
        }
@@ -162,9 +162,9 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 az group create --name kind_aws --location EastUS --output table"
+             sh "ssh ubuntu@3.110.159.249 az group create --name kind_aws --location EastUS --output table"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 az group create --name kind_aws --location EastUS --output table"
+             sh "ssh ubuntu@3.110.159.249 az group create --name kind_aws --location EastUS --output table"
            }
          }
        }
@@ -190,9 +190,9 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
+             sh "ssh ubuntu@3.110.159.249 az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
+             sh "ssh ubuntu@3.110.159.249 az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
            }
          }
        }
@@ -219,12 +219,12 @@ pipeline {
      steps{
        sh "chmod +x token.sh"
        sshagent(['kind']){
-         sh "scp -o StrictHostKeyChecking=no -q token.sh ubuntu@3.111.23.250:/home/ubuntu/"
+         sh "scp -o StrictHostKeyChecking=no -q token.sh ubuntu@3.110.159.249:/home/ubuntu/"
          script{
            try{
-             sh "ssh ubuntu@3.111.23.250 ./token.sh"
+             sh "ssh ubuntu@3.110.159.249 ./token.sh"
            }catch(error){
-             sh "ssh ubuntu@3.111.23.250 ./token.sh"
+             sh "ssh ubuntu@3.110.159.249 ./token.sh"
            }
          }
        }
@@ -265,13 +265,13 @@ pipeline {
         sshagent(['kind']) {
           script {
             try {
-              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@3.111.23.250:/home/ubuntu/"
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@3.110.159.249:/home/ubuntu/"
               sh "sleep 2"
-              sh "ssh ubuntu@3.111.23.250 kubectl apply -f opensips.yaml"
+              sh "ssh ubuntu@3.110.159.249 kubectl apply -f opensips.yaml"
             }catch(error){
-              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@3.111.23.250:/home/ubuntu/"
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@3.110.159.249:/home/ubuntu/"
               sh "sleep 2"
-              sh "ssh ubuntu@3.111.23.250 kubectl apply -f opensips.yaml"
+              sh "ssh ubuntu@3.110.159.249 kubectl apply -f opensips.yaml"
             }
           }
         }
@@ -282,10 +282,10 @@ pipeline {
       steps {
         sh "chmod +x configure.sh"
         sshagent(['kind']) {
-          sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@3.111.23.250:/home/ubuntu"
+          sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@3.110.159.249:/home/ubuntu"
           script {
             sh "sleep 30"
-            sh "ssh ubuntu@3.111.23.250 ./configure.sh"
+            sh "ssh ubuntu@3.110.159.249 ./configure.sh"
           }
         }
       }
