@@ -6,7 +6,7 @@ metadata:
   labels:
     app: opensips
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: opensips
@@ -32,7 +32,7 @@ metadata:
   labels:
     app: uas
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: uas
