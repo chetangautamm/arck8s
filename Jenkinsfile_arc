@@ -4,6 +4,16 @@ pipeline {
     registry = "chetangautamm/repo"
     registryCredential = '58881f31-29bb-48a8-9da9-fc254654146d'
     dockerImage = ""
+
+    SITE1_HOSTNAME = "20.193.238.113"
+    SITE1_USERNAME = "kubeadm"
+    SITE1_PASSWORD = "kubeadm@1234"
+
+    SITE2_HOSTNAME = "13.234.34.254"
+    SITE2_USERNAME = "ubuntu"
+    SITE2_PASSWORD = "ubuntu"
+
+
   }
 
   agent any
@@ -15,14 +25,16 @@ pipeline {
         git 'https://github.com/chetangautamm/arck8s.git'
       }
     }
-   stage("Azure Cli:KUBEADM(AZURE)"){
+
+// TO demonstrate real edge scenario credentials needs to be added before the execution.
+   stage("Azure Cli:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['kubeadm']){
+       sshagent(['SITE1_USERNAME']){
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }
          }
        }
@@ -34,23 +46,23 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.110.159.249 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }catch(error){
-             sh "ssh ubuntu@3.110.159.249 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }
          }
        }
      }
    }
 
-   stage("Connectedk8s Extension:KUBEADM(AZURE)"){
+   stage("Connectedk8s Extension:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['kubeadm']){
+       sshagent(['SITE1_USERNAME']){
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 az extension add --name connectedk8s"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az extension add --name connectedk8s"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 az extension add --name connectedk8s"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az extension add --name connectedk8s"
            }
          }
        }
@@ -62,27 +74,27 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.110.159.249 az extension add --name connectedk8s"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az extension add --name connectedk8s"
            }catch(error){
-             sh "ssh ubuntu@3.110.159.249 az extension add --name connectedk8s"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az extension add --name connectedk8s"
            }
          }
        }
      }
    }
 
-   stage("Register Arc Providers:KUBEADM(AZURE)"){
+   stage("Register Arc Providers:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['kubeadm']){
+       sshagent(['SITE1_USERNAME']){
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.Kubernetes"
-             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.ExtendedLocation"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider register --namespace Microsoft.ExtendedLocation"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.Kubernetes"
-             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "ssh kubeadm@20.193.238.113 az provider register --namespace Microsoft.ExtendedLocation"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider register --namespace Microsoft.ExtendedLocation"
            }
          }
        }
@@ -94,31 +106,31 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.Kubernetes"
-             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.ExtendedLocation"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider register --namespace Microsoft.ExtendedLocation"
            }catch(error){
-             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.Kubernetes"
-             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "ssh ubuntu@3.110.159.249 az provider register --namespace Microsoft.ExtendedLocation"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider register --namespace Microsoft.Kubernetes"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider register --namespace Microsoft.ExtendedLocation"
            }
          }
        }
      }
    }
 
-   stage("Verify Arc Providers:KUBEADM(AZURE)"){
+   stage("Verify Arc Providers:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['kubeadm']){
+       sshagent(['SITE1_USERNAME']){
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.Kubernetes -o table"
-             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.ExtendedLocation -o table"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider show -n Microsoft.ExtendedLocation -o table"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.Kubernetes -o table"
-             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "ssh kubeadm@20.193.238.113 az provider show -n Microsoft.ExtendedLocation -o table"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider show -n Microsoft.ExtendedLocation -o table"
            }
          }
        }
@@ -130,27 +142,27 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.Kubernetes -o table"
-             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.ExtendedLocation -o table"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider show -n Microsoft.ExtendedLocation -o table"
            }catch(error){
-             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.Kubernetes -o table"
-             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "ssh ubuntu@3.110.159.249 az provider show -n Microsoft.ExtendedLocation -o table"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider show -n Microsoft.Kubernetes -o table"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider show -n Microsoft.ExtendedLocation -o table"
            }
          }
        }
      }
    }
 
-   stage("Create Resource Group:KUBEADM(AZURE)"){
+   stage("Create Resource Group:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['kubeadm']){
+       sshagent(['SITE1_USERNAME']){
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 az group create --name kubeadm_azure --location EastUS --output table"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az group create --name SITE1_USERNAME_azure --location EastUS --output table"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 az group create --name kubeadm_azure --location EastUS --output table"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az group create --name SITE1_USERNAME_azure --location EastUS --output table"
            }
          }
        }
@@ -162,23 +174,23 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.110.159.249 az group create --name kind_aws --location EastUS --output table"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az group create --name kind_aws --location EastUS --output table"
            }catch(error){
-             sh "ssh ubuntu@3.110.159.249 az group create --name kind_aws --location EastUS --output table"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az group create --name kind_aws --location EastUS --output table"
            }
          }
        }
      }
    }
 
-   stage("Connect Existing K8s:KUBEADM(AZURE)"){
+   stage("Connect Existing K8s:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['kubeadm']){
+       sshagent(['SITE1_USERNAME']){
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 az connectedk8s connect --name Edge_Site-1 --resource-group kubeadm_azure"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az connectedk8s connect --name Edge_Site-1 --resource-group SITE1_USERNAME_azure"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 az connectedk8s connect --name Edge_Site-1 --resource-group kubeadm_azure"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az connectedk8s connect --name Edge_Site-1 --resource-group SITE1_USERNAME_azure"
            }
          }
        }
@@ -190,25 +202,25 @@ pipeline {
        sshagent(['kind']){
          script{
            try{
-             sh "ssh ubuntu@3.110.159.249 az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
            }catch(error){
-             sh "ssh ubuntu@3.110.159.249 az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
            }
          }
        }
      }
    }
 
-   stage("Service Account Token Authentication:KUBEADM(AZURE)"){
+   stage("Service Account Token Authentication:SITE1_USERNAME(AZURE)"){
      steps{
        sh "chmod +x token.sh"
-       sshagent(['kubeadm']){
-         sh "scp -o StrictHostKeyChecking=no -q token.sh kubeadm@20.193.238.113:/home/kubeadm/"
+       sshagent(['SITE1_USERNAME']){
+         sh "scp -o StrictHostKeyChecking=no -q token.sh SITE1_USERNAME@SITE1_HOSTNAME:/home/SITE1_USERNAME/"
          script{
            try{
-             sh "ssh kubeadm@20.193.238.113 ./token.sh"
+             sh "ssh kubeadm@SITE1_HOSTNAME ./token.sh"
            }catch(error){
-             sh "ssh kubeadm@20.193.238.113 ./token.sh"
+             sh "ssh SITE1_USERNAME@SITE1_HOSTNAME ./token.sh"
            }
          }
        }
@@ -219,43 +231,43 @@ pipeline {
      steps{
        sh "chmod +x token.sh"
        sshagent(['kind']){
-         sh "scp -o StrictHostKeyChecking=no -q token.sh ubuntu@3.110.159.249:/home/ubuntu/"
+         sh "scp -o StrictHostKeyChecking=no -q token.sh SITE2_USERNAME@SITE2_HOSTNAME:/home/SITE2_USERNAME/"
          script{
            try{
-             sh "ssh ubuntu@3.110.159.249 ./token.sh"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME ./token.sh"
            }catch(error){
-             sh "ssh ubuntu@3.110.159.249 ./token.sh"
+             sh "ssh SITE2_USERNAME@SITE2_HOSTNAME ./token.sh"
            }
          }
        }
      }
    }
 
-   stage('Deploy Opensips:KUBEADM(AZURE) ') {
+   stage('Deploy Opensips:SITE1_USERNAME(AZURE) ') {
       steps {
-        sshagent(['kubeadm']) {
+        sshagent(['SITE1_USERNAME']) {
           script {
             try {
-              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml kubeadm@20.193.238.113:/home/kubeadm/"
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml SITE1_USERNAME@SITE1_HOSTNAME:/home/SITE1_USERNAME/"
               sh "sleep 2"
-              sh "ssh kubeadm@20.193.238.113 kubectl apply -f opensips.yaml"
+              sh "ssh SITE1_USERNAME@SITE1_HOSTNAME kubectl apply -f opensips.yaml"
             }catch(error){
-              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml kubeadm@20.193.238.113:/home/kubeadm/"
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml SITE1_USERNAME@SITE1_HOSTNAME:/home/SITE1_USERNAME/"
               sh "sleep 2"
-              sh "ssh kubeadm@20.193.238.113 kubectl apply -f opensips.yaml"
+              sh "ssh SITE1_USERNAME@SITE1_HOSTNAME kubectl apply -f opensips.yaml"
             }
           }
         }
       }
     }
-    stage('Validate Opensips:KUBEADM(AZURE)') {
+    stage('Validate Opensips:SITE1_USERNAME(AZURE)') {
       steps {
         sh "chmod +x configure.sh"
-        sshagent(['kubeadm']) {
-          sh "scp -o StrictHostKeyChecking=no -q configure.sh kubeadm@20.193.238.113:/home/kubeadm"
+        sshagent(['SITE1_USERNAME']) {
+          sh "scp -o StrictHostKeyChecking=no -q configure.sh SITE1_USERNAME@SITE1_HOSTNAME:/home/SITE1_USERNAME"
           script {
             sh "sleep 20"
-            sh "ssh kubeadm@20.193.238.113 ./configure.sh"
+            sh "ssh kubeadm@SITE1_HOSTNAME ./configure.sh"
           }
         }
       }
@@ -265,13 +277,13 @@ pipeline {
         sshagent(['kind']) {
           script {
             try {
-              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@3.110.159.249:/home/ubuntu/"
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml SITE2_USERNAME@SITE2_HOSTNAME:/home/SITE2_USERNAME/"
               sh "sleep 2"
-              sh "ssh ubuntu@3.110.159.249 kubectl apply -f opensips.yaml"
+              sh "ssh SITE2_USERNAME@SITE2_HOSTNAME kubectl apply -f opensips.yaml"
             }catch(error){
-              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml ubuntu@3.110.159.249:/home/ubuntu/"
+              sh "scp -o StrictHostKeyChecking=no -q opensips.yaml SITE2_USERNAME@SITE2_HOSTNAME:/home/SITE2_USERNAME/"
               sh "sleep 2"
-              sh "ssh ubuntu@3.110.159.249 kubectl apply -f opensips.yaml"
+              sh "ssh SITE2_USERNAME@SITE2_HOSTNAME kubectl apply -f opensips.yaml"
             }
           }
         }
@@ -282,10 +294,10 @@ pipeline {
       steps {
         sh "chmod +x configure.sh"
         sshagent(['kind']) {
-          sh "scp -o StrictHostKeyChecking=no -q configure.sh ubuntu@3.110.159.249:/home/ubuntu"
+          sh "scp -o StrictHostKeyChecking=no -q configure.sh SITE2_USERNAME@SITE2_HOSTNAME:/home/SITE2_USERNAME"
           script {
             sh "sleep 30"
-            sh "ssh ubuntu@3.110.159.249 ./configure.sh"
+            sh "ssh SITE2_USERNAME@SITE2_HOSTNAME ./configure.sh"
           }
         }
       }
