@@ -5,14 +5,21 @@ node {
 
     stage('load data') {
         def conf = readYaml file: "sites.yaml"
-        sh "echo 'inside load data stage'"
-        sh "echo ${conf}"
-        for (block in conf) {
+        text="test1.var1.eu-20190414121923517200000001 test2.var2.ue1-20190414121925623400000002 test3.var3.ue1-20190414121926583500000003"
+        echo 'inside load data stage'
+        echo ${conf}
+        def texts = text.split(' ')
+        echo ${texts}
+        for (txt in texts) {
+            sh "echo 'inside for loop'"
+            sh "echo ${txt}"
+}
+        /*for (block in conf) {
             sh "echo 'inside for loop'"
             script {
-                 sh "echo ${block}"
+                 //sh "echo ${block}"
             }         
-        }
+        }*/
     }
 }
   
