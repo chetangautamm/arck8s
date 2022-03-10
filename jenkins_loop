@@ -3,10 +3,10 @@ node {
   checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
   def conf = readYaml file: "sites.yaml"
   for (block in conf) {
-        tstage(block)
+        sh "echo ${block}"
   }
 
-  def tstage(block) {
+  /*def tstage(block) {
     stage(block.message){
         steps { 
             script {
@@ -14,5 +14,5 @@ node {
             }
         }
     }
-  }
+  }*/
 }
