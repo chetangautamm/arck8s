@@ -1,13 +1,16 @@
 node {
+
+    def conf = readYaml file: "/var/lib/jenkins/workspace/Arc_Demo/sites.yaml"
     
     stage('Checkout Source Code') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
     }
 
     stage('load data'){
-        def conf = readYaml file: "/var/lib/jenkins/workspace/Arc_Demo/sites.yaml"
         for (block in conf) {
-            sh "echo ${block}"
+            script{
+                 sh "echo ${block}"
+            }         
         }
     }
 }
