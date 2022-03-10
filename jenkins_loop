@@ -4,7 +4,7 @@ node {
     }
 
     stage('load data') {
-        def conf = readYaml file: "/var/lib/jenkins/workspace/Arc_Demo/sites.yaml"
+        def conf = readYaml file: "sites.yaml"
         sh "echo 'inside load data stage'"
         sh "echo ${conf}"
         for (block in conf) {
