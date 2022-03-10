@@ -5,8 +5,3 @@ block:
   username: "ubuntu"
   password: "ubuntu"
  
-block:
-  message: "Second Stage"
-  ip: "20.193.238.113"
-  username: "kubeadm"
-  password: "kubeadm@1234"
