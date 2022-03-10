@@ -6,7 +6,7 @@ node {
         execute-stage(block)
   }
 
-def execute-stage(block) {
+  def execute-stage(block) {
     stage(block.message){
         steps { 
             script {
