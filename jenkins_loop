@@ -1,7 +1,7 @@
 node {
     
   checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
-  def conf = readProperties file: "sites.yaml"
+  def conf = readYaml file: "sites.yaml"
   for block in conf {
         execute-stage(block)
   }
