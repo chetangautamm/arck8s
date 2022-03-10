@@ -3,13 +3,13 @@ node {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
     }
 
-    stage('load data'){
+    stage('load data') {
         def conf = readYaml file: "/var/lib/jenkins/workspace/Arc_Demo/sites.yaml"
         sh "echo 'inside load data stage'"
         sh "echo ${conf}"
         for (block in conf) {
             sh "echo 'inside for loop'"
-            script{
+            script {
                  sh "echo ${block}"
             }         
         }
