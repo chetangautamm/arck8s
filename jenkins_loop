@@ -3,7 +3,7 @@ def tstage(block) {
     for (block in conf) {
             //echo 'inside for loop'
             echo "${block}"
-            echo tstage(block)  
+            //echo tstage(block)  
               
     }
   }
