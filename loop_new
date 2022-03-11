@@ -1,6 +1,6 @@
 node {
   def conf = readYaml file: "sites.yaml"
-  for block in conf {
+  for (block in conf) {
         execute-stage(block)
   }
 
