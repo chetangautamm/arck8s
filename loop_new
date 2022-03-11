@@ -1,7 +1,7 @@
 node {
   def conf = readYaml file: "sites.yaml"
   for (block in conf) {
-        execute-stage(block)
+        testloop(block)
   }
 
   stage('Checkout Source Code') {
@@ -9,7 +9,7 @@ node {
     }
 }
 
-def execute-stage(block) {
+def testloop(block) {
     stage(block.message){
         steps { 
             script {
