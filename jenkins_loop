@@ -20,12 +20,13 @@ node {
 }*/
         for (block in conf) {
             echo 'inside for loop'
-            echo "${block.message}"       
+            echo "${block}" 
+            tstage(block)      
         }
     }
 }
   
-  /*def tstage(block) {
+def tstage(block) {
     stage(block.message){
         steps { 
             script {
@@ -33,4 +34,4 @@ node {
             }
         }
     }
-  }*/
+  }
