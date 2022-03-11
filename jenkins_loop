@@ -19,8 +19,8 @@ node {
          echo "${element.key} ${element.value}"
 }*/
         for (block in conf) {
-            sh "echo 'inside for loop'"
-            sh "echo ${block}"       
+            echo 'inside for loop'
+            echo "${block}"       
         }
     }
 }
