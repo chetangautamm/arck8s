@@ -1,0 +1,20 @@
+node {
+  def conf = readYaml file: "sites.yaml"
+  for block in conf {
+        execute-stage(block)
+  }
+
+  stage('Checkout Source Code') {
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
+    }
+}
+
+def execute-stage(block) {
+    stage(block.message){
+        steps { 
+            script {
+            sh "sshpass -p ${block.password} ssh -o StrictHostKeyChecking=no ${block.username}@${bock.ip} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+            }
+        }
+    }
+}
