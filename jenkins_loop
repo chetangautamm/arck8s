@@ -1,8 +1,6 @@
 def tstage(block) {
-   return{
        A= "${block.ip}"
        B= "${block.username}"
-   }
   }
 node {  
     stage('Checkout Source Code') {
@@ -27,7 +25,7 @@ node {
         for (block in conf) {
             echo 'inside for loop'
             //echo "${block}"
-            tstage(block);     
+            tstage(block)    
         }
     }
 }
