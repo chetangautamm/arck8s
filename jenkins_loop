@@ -25,10 +25,10 @@ node {
         }
     }
 }
-def tstage(block) {
+def tstage(i) {
    return{
-       A= "${block.ip}"
-       B= "${block.username}"
+       A= "${i.ip}"
+       B= "${i.username}"
    }
   }
   
