@@ -1,6 +1,7 @@
 def tstage(block) {
-       A= "${block.ip}"
-       B= "${block.username}"
+    def conf = readYaml file: "sites.yaml"
+    A= "${block.ip}"
+    B= "${block.username}"
   }
 node {  
     stage('Checkout Source Code') {
