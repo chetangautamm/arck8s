@@ -14,14 +14,14 @@ node {
         for (txt in texts) {
             sh "echo 'inside for loop'"
             sh "echo ${txt}"
-}*/     
+}    
         for (element in map) {
          echo "${element.key} ${element.value}"
-}
-        /*for (block in conf) {
+}*/
+        for (block in conf) {
             sh "echo 'inside for loop'"
             sh "echo ${block}"       
-        }*/
+        }
     }
 }
   
