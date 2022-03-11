@@ -20,7 +20,7 @@ node {
 }*/
         for (block in conf) {
             echo 'inside for loop'
-            echo "${block.ip}"       
+            echo "${block.message}"       
         }
     }
 }
