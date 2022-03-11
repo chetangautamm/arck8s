@@ -1,3 +1,9 @@
+def tstage(block) {
+   return{
+       A= "${block.ip}"
+       B= "${block.username}"
+   }
+  }
 node {  
     stage('Checkout Source Code') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
@@ -25,12 +31,7 @@ node {
         }
     }
 }
-def tstage(i) {
-   return{
-       A= "${i.ip}"
-       B= "${i.username}"
-   }
-  }
+
   
 /*def stage(block) {
     stage(block.message){
