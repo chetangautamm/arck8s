@@ -20,12 +20,19 @@ node {
 }*/
         for (block in conf) {
             echo 'inside for loop'
-            echo "${block}"      
+            echo "${block}"
+            stage(block)      
         }
     }
 }
+def stage(block) {
+   return{
+       A= '${block.ip}'
+       B= ${block.username}
+   }
+  }
   
-def tstage(block) {
+/*def stage(block) {
     stage(block.message){
         steps { 
             script {
@@ -33,4 +40,4 @@ def tstage(block) {
             }
         }
     }
-  }
+  }*/
