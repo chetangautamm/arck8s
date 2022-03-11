@@ -21,14 +21,14 @@ node {
         for (block in conf) {
             echo 'inside for loop'
             echo "${block}"
-            stage(block)      
+            tstage(block)      
         }
     }
 }
-def stage(block) {
+def tstage(block) {
    return{
-       A= '${block.ip}'
-       B= ${block.username}
+       A= "${block.ip}"
+       B= "${block.username}"
    }
   }
   
