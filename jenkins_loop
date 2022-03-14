@@ -27,7 +27,7 @@ node {
         for (block in conf) {
             //echo 'inside for loop'
             //echo "${block}"
-            echo tstage(block)         
+            ipd = echo tstage(block)         
         }
     }
 }
