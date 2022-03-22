@@ -1,7 +1,7 @@
 def tstage(block) {
     def conf = readYaml file: "sites.yaml"
             //echo 'inside for loop'
-            echo "${block.username}"
+            echo "v=${block.username}"
             
             //echo tstage(block)
   }
@@ -25,11 +25,11 @@ node {
         for (element in map) {
          echo "${element.key} ${element.value}"
 }*/
-        /*for (block in conf) {
+        for (block in conf) {
             //echo 'inside for loop'
             //echo "${block}"
-            echo tstage(block)         
-        }*/
+            tstage(block)         
+        }
     }
 }
 
