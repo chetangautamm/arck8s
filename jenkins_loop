@@ -1,7 +1,7 @@
 def tstage(block) {
     def conf = readYaml file: "sites.yaml"
             //echo 'inside for loop'
-            echo "${block.username}"
+            def ips = echo "${block.username}"
             
             //echo tstage(block)
   }
