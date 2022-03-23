@@ -5,11 +5,10 @@ def tstage(block) {
             echo "${user_list}"
             /*list.each { item ->
         sh "echo Hello ${item}"*/
-}
             //echo tstage(block)
             /*for (txt in conf) {
                 sh "echo ${txt[1]}"}*/
-  }
+                }
 
 node {  
     stage('Checkout Source Code') {
