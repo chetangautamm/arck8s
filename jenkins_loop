@@ -4,8 +4,8 @@ def tstage(block) {
             def user_list = "${conf.block.username}"
             echo "user list is ${user_list}"
 
-            def ctr = user_list.size
-            echo "ctr is-${ctr}"
+            def ctr = conf.size()
+            echo "ctr is ${ctr}"
             for (i=0;i<ctr;i++)
             {  
                 def sample = user_list.get(i)
