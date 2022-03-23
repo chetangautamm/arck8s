@@ -7,8 +7,8 @@ def tstage(block) {
     }
             //echo tstage(block)
             /*for (txt in conf) {
-                sh "echo ${txt[1]}"}
-  }*/
+                sh "echo ${txt[1]}"}*/
+  }
 
 node {  
     stage('Checkout Source Code') {
