@@ -1,10 +1,13 @@
 def tstage(block) {
     def conf = readYaml file: "sites.yaml"
             //echo 'inside for loop'
-            echo "v=${conf.block.username}"
+            echo "${conf.block.username}"
             
             //echo tstage(block)
+            for (txt in conf) {
+                sh "echo ${txt[1]}"}
   }
+
 node {  
     stage('Checkout Source Code') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
