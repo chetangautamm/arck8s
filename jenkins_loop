@@ -1,7 +1,7 @@
 def tstage(block) {
     def conf = readYaml file: "sites.yaml"
             //echo 'inside for loop'
-            def user_list = "${conf.block.username}"
+            def user_list = conf.block.username
             echo "user list is ${user_list}"
 
             def ctr = conf.size()
