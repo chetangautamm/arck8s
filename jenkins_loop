@@ -1,10 +1,11 @@
 def tstage(block) {
     def conf = readYaml file: "sites.yaml"
             //echo 'inside for loop'
-            echo "${conf.block.username}"
-            list.each { item ->
-        sh "echo Hello ${item}"
-    }
+            def user_list = "${conf.block.username}"
+            echo ${user_list}
+            /*list.each { item ->
+        sh "echo Hello ${item}"*/
+}
             //echo tstage(block)
             /*for (txt in conf) {
                 sh "echo ${txt[1]}"}*/
@@ -39,7 +40,7 @@ node {
 }
 
   
-/*def stage(block) {
+def stage(block) {
     stage(block.message){
         steps { 
             script {
@@ -47,4 +48,4 @@ node {
             }
         }
     }
-  }*/
+  }
