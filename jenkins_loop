@@ -3,6 +3,15 @@ def tstage(block) {
             //echo 'inside for loop'
             def user_list = "${conf.block.username}"
             echo "user list is ${user_list}"
+
+            def ctr = user_list.size()
+            echo "ctr is-${ctr}"
+            for (i=0;i<ctr;i++)
+            {  
+                def sample = user_list.get(i)
+                echo "value of i is ${i}"
+                echo "value of user_list item is ${sample}"
+            }
             /*list.each { item ->
         sh "echo Hello ${item}"*/
             //echo tstage(block)
