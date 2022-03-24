@@ -14,7 +14,7 @@ def tstage(block) {
                 echo "value of user_list item is ${sample}"
                 stage ('Build second pipeline'){
         echo "trigerring global_var pipeline"
-        build job: 'global_var',parameters: [string(name: 'VAR_GLOBAL', value: "${sample}"),string(name: 'VAR_GLOBAL1', value: "${sample}")]
+        build job: 'global_var',parameters: [string(name: 'VAR_GLOBAL', value: "${user_list.get(i)}"),string(name: 'VAR_GLOBAL1', value: "${sample}")]
     }
             }
             /*list.each { item ->
