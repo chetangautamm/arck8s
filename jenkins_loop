@@ -12,13 +12,19 @@ def tstage(block) {
                 def sample = user_list.get(i)
                 echo "value of i is ${i}"
                 echo "value of user_list item is ${sample}"
+                stage ('Build second pipeline'){
+        echo "trigerring global_var pipeline"
+        build job: 'global_var',parameters: [string(name: 'VAR_GLOBAL', value: 'user_list.get(i)'),string(name: 'VAR_GLOBAL1', value: 'user_list.get(i)')]
+    }
             }
             /*list.each { item ->
         sh "echo Hello ${item}"*/
             //echo tstage(block)
             /*for (txt in conf) {
                 sh "echo ${txt[1]}"}*/
-                }
+    }
+
+ 
 
 node {  
     stage('Checkout Source Code') {
