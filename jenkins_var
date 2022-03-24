@@ -9,5 +9,10 @@ node {
         var_global = var_global+1 
 
         echo "${var_global}"
-    }       
+    }  
+
+    stage ('Build second pipeline'){
+        echo "trigerring destroy_infra pipeline"
+        build job: 'global_var'
+    }     
 }
