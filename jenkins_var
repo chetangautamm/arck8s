@@ -13,6 +13,6 @@ node {
 
     stage ('Build second pipeline'){
         echo "trigerring global_var pipeline"
-        build job: 'global_var'
+        build job: 'global_var',parameters: [string(name: 'var_global', value: 'value from Build pipeline')]
     }     
 }
