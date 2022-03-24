@@ -5,7 +5,7 @@ def tstage(block) {
             def ip_list = conf.block.ip
             def password_list = conf.block.password
             echo "user list is ${user_list}"
-            def ctr = conf.size()
+            def ctr = user_list.size()
             echo "ctr is ${ctr}"
             for (i=0;i<ctr;i++)
             {  
