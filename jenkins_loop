@@ -4,16 +4,16 @@ def tstage(block) {
             def user_list = conf.block.username
             def ip_list = conf.block.ip
             def password_list = conf.block.password
-            echo "user list is ${user_list}"
+            //echo "user list is ${user_list}"
             def ctr = user_list.size()
-            echo "ctr is ${ctr}"
+            //echo "ctr is ${ctr}"
             for (i=0;i<ctr;i++)
             {  
                 def sample = user_list.get(i)
-                echo "value of i is ${i}"
-                echo "value of user_list item is ${sample}"
+                //echo "value of i is ${i}"
+                //echo "value of user_list item is ${sample}"
         echo "trigerring global_var pipeline"
-        build job: 'global_var',parameters: [string(name: 'VAR_GLOBAL', value: "${user_list.get(i)}"),string(name: 'VAR_GLOBAL1', value: "${sample}")]
+        build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${user_list.get(i)}"),string(name: 'PASSWORD', value: "${password_list.get(i)}",string(name: 'IP', value: "${ip_list.get(i)}")]
             }
             /*list.each { item ->
         sh "echo Hello ${item}"*/
@@ -30,11 +30,11 @@ node {
     }
 
     stage('load data') {
-        def conf = readYaml file: "sites.yaml"
-        def map = [Io: [1,2,3], Europa: [20,30,40], Ganymed: [00,400,500]]
-        text="test1.var1.eu-20190414121923517200000001 test2.var2.ue1-20190414121925623400000002 test3.var3.ue1-20190414121926583500000003"
-        echo 'inside load data stage'
-        echo "${conf}"
+        //def conf = readYaml file: "sites.yaml"
+        //def map = [Io: [1,2,3], Europa: [20,30,40], Ganymed: [00,400,500]]
+        //text="test1.var1.eu-20190414121923517200000001 test2.var2.ue1-20190414121925623400000002 test3.var3.ue1-20190414121926583500000003"
+        //echo 'inside load data stage'
+        //echo "${conf}"
         /*def texts = text.split(' ')
         echo "${texts}"
         for (txt in texts) {
