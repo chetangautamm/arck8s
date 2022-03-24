@@ -12,7 +12,7 @@ node {
     }  
 
     stage ('Build second pipeline'){
-        echo "trigerring destroy_infra pipeline"
+        echo "trigerring global_var pipeline"
         build job: 'global_var'
     }     
 }

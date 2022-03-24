@@ -5,7 +5,7 @@ node {
     }
 
 // TO demonstrate real edge scenario credentials needs to be added before the execution.
-   stage("Azure Cli:${SITE1_USERNAME}(AZURE)"){
+   stage("Varibale test"){
        echo "${var_global}"
 
        var_global = var_global+2
