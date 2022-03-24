@@ -1,18 +1,19 @@
 node {  
-    var_global = 1
+    VAR_GLOBAL = 1
+    VAR_GLOBAL1 =5
     stage('Checkout Source Code') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
     }
 
     stage('Print value'){
-        echo "${var_global}"
-        var_global = var_global+1 
+        echo "${VAR_GLOBAL}"
+        VAR_GLOBAL = VAR_GLOBAL+1 
 
-        echo "${var_global}"
+        echo "${VAR_GLOBAL}"
     }  
 
     stage ('Build second pipeline'){
         echo "trigerring global_var pipeline"
-        build job: 'global_var',parameters: [string(name: 'VAR_GLOBAL', value: '1'),string(name: 'VAR_GLOBAL1', value: '2')]
+        build job: 'global_var'
     }     
 }
