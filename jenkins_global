@@ -8,7 +8,7 @@ node {
    stage("Varibale test"){
        echo "${var_global}"
 
-       var_global = var_global + 2
+       var_global = "${var_global}" + 2
        echo"latest value is ${var_global}"
       }
    }
