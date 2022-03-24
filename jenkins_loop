@@ -13,7 +13,7 @@ def tstage(block) {
                 //echo "value of i is ${i}"
                 //echo "value of user_list item is ${sample}"
         echo "trigerring global_var pipeline"
-        build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${user_list.get(i)}"),string(name: 'PASSWORD', value: "${password_list.get(i)}",string(name: 'IP', value: "${ip_list.get(i)}")]
+        build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${user_list.get(i)}"),string(name: 'PASSWORD', value: "${password_list.get(i)}"),string(name: 'IP', value: "${ip_list.get(i)}")]
             }
             /*list.each { item ->
         sh "echo Hello ${item}"*/
