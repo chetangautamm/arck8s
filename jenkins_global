@@ -7,8 +7,11 @@ node {
 // TO demonstrate real edge scenario credentials needs to be added before the execution.
    stage("Varibale test"){
        echo "${VAR_GLOBAL}"
+       echo "${VAR_GLOBAL1}"
 
        VAR_GLOBAL = VAR_GLOBAL + 2
+       VAR_GLOBAL1 = VAR_GLOBAL1 + 1
        echo"latest value is ${VAR_GLOBAL}"
+       echo"latest value is ${VAR_GLOBAL1}"
       }
    }
