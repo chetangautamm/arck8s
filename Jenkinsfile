@@ -10,7 +10,7 @@
 
 // TO demonstrate real edge scenario credentials needs to be added before the execution.
    stage("Azure Cli:${USERNAME}"){
-       sshagent(['${USERNAME}']){
+       sshagent(["${USERNAME}"]){
          script{
            try{
              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
@@ -23,7 +23,7 @@
 
 
    stage("Connectedk8s Extension:${USERNAME}"){
-       sshagent(['${USERNAME}']){
+       sshagent(["${USERNAME}"]){
          script{
            try{
              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az extension add --name connectedk8s"
@@ -36,7 +36,7 @@
 
 
    stage("Register Arc Providers:${USERNAME}"){
-       sshagent(['${USERNAME}']){
+       sshagent(["${USERNAME}"]){
          script{
            try{
              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.Kubernetes"
@@ -53,7 +53,7 @@
 
 
    stage("Verify Arc Providers:${USERNAME}"){
-       sshagent(['${USERNAME}']){
+       sshagent(["${USERNAME}"]){
          script{
            try{
              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.Kubernetes -o table"
@@ -70,7 +70,7 @@
 
    
    stage("Create Resource Group"){
-       sshagent(['${USERNAME}']){
+       sshagent(["${USERNAME}"]){
          script{
            try{
              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az group create --name ${USERNAME}_azure --location EastUS --output table"
@@ -83,7 +83,7 @@
 
    
    stage("Connect Existing K8s:${USERNAME}"){
-       sshagent(['${USERNAME}']){
+       sshagent(["${USERNAME}"]){
          script{
            try{
              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az connectedk8s connect --name Edge_Site-1 --resource-group ${USERNAME}_azure"
@@ -98,7 +98,7 @@
 
    stage("Service Account Token Authentication:${USERNAME}"){
        sh "chmod +x token.sh"
-       sshagent(['${USERNAME}']){
+       sshagent(["${USERNAME}"]){
          sh "scp -o StrictHostKeyChecking=no -q token.sh ${USERNAME}@${IP}:/home/${USERNAME}/"
          script{
            try{
@@ -112,8 +112,8 @@
 
    
 
-   stage('Deploy Opensips:${USERNAME}') {
-        sshagent(['${USERNAME}']) {
+   stage("Deploy Opensips:${USERNAME}") {
+        sshagent(["${USERNAME}"]) {
           script {
             try {
               sh "sshpass -p ${PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${USERNAME}@${IP}:/home/${USERNAME}/"
@@ -129,7 +129,7 @@
       }
     stage('Validate Opensips:${USERNAME}') {
         sh "chmod +x configure.sh"
-        sshagent(['${USERNAME}']) {
+        sshagent(["${USERNAME}"]) {
           sh "sshpass -p ${PASSWORD} scp -o StrictHostKeyChecking=no -q configure.sh ${USERNAME}@${IP}:/home/${USERNAME}"
           script {
             sh "sleep 20"
