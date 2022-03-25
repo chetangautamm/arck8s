@@ -4,256 +4,137 @@
     def registryCredential = '58881f31-29bb-48a8-9da9-fc254654146d'
     def dockerImage = ""
 
-    def SITE1_HOSTNAME = "20.193.238.113"
-    def SITE1_USERNAME = "kubeadm"
-    def SITE1_PASSWORD = "kubeadm@1234"
-
-    def SITE2_HOSTNAME = "3.111.41.173"
-    def SITE2_USERNAME = "ubuntu"
-    def SITE2_PASSWORD = "ubuntu"
-
     stage('Checkout Source Code') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
     }
 
 // TO demonstrate real edge scenario credentials needs to be added before the execution.
-   stage("Azure Cli:${SITE1_USERNAME}(AZURE)"){
-       sshagent(['${SITE1_USERNAME}']){
+   stage("Azure Cli:${USERNAME}"){
+       sshagent(['${USERNAME}']){
          script{
            try{
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }catch(error){
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }
          }
       }
    }
 
-   stage("Azure Cli:KIND(AWS)"){
-       sshagent(['kind']){
+
+   stage("Connectedk8s Extension:${USERNAME}"){
+       sshagent(['${USERNAME}']){
          script{
            try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az extension add --name connectedk8s"
            }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az extension add --name connectedk8s"
            }
          }
        }
      }
 
-   stage("Connectedk8s Extension:${SITE1_USERNAME}(AZURE)"){
-       sshagent(['${SITE1_USERNAME}']){
+
+   stage("Register Arc Providers:${USERNAME}"){
+       sshagent(['${USERNAME}']){
          script{
            try{
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az extension add --name connectedk8s"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.Kubernetes"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.ExtendedLocation"
            }catch(error){
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az extension add --name connectedk8s"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.Kubernetes"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.ExtendedLocation"
            }
          }
        }
      }
 
-   stage("Connectedk8s Extension:KIND(AWS)"){
-       sshagent(['kind']){
+
+   stage("Verify Arc Providers:${USERNAME}"){
+       sshagent(['${USERNAME}']){
          script{
            try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az extension add --name connectedk8s"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.Kubernetes -o table"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.ExtendedLocation -o table"
            }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az extension add --name connectedk8s"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.Kubernetes -o table"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.ExtendedLocation -o table"
            }
          }
        }
      }
 
-   stage("Register Arc Providers:${SITE1_USERNAME}(AZURE)"){
-       sshagent(['${SITE1_USERNAME}']){
+   
+   stage("Create Resource Group:${(AZURE)"){
+       sshagent(['${USERNAME}']){
          script{
            try{
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider register --namespace Microsoft.Kubernetes"
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider register --namespace Microsoft.ExtendedLocation"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az group create --name ${USERNAME}_azure --location EastUS --output table"
            }catch(error){
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider register --namespace Microsoft.Kubernetes"
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider register --namespace Microsoft.ExtendedLocation"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az group create --name ${USERNAME}_azure --location EastUS --output table"
            }
          }
        }
      }
 
-   stage("Register Arc Providers:KIND(AWS)"){
-       sshagent(['kind']){
+   
+   stage("Connect Existing K8s:${USERNAME}"){
+       sshagent(['${USERNAME}']){
          script{
            try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider register --namespace Microsoft.Kubernetes"
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider register --namespace Microsoft.ExtendedLocation"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az connectedk8s connect --name Edge_Site-1 --resource-group ${USERNAME}_azure"
            }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider register --namespace Microsoft.Kubernetes"
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider register --namespace Microsoft.ExtendedLocation"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az connectedk8s connect --name Edge_Site-1 --resource-group ${USERNAME}_azure"
            }
          }
        }
      }
 
-   stage("Verify Arc Providers:${SITE1_USERNAME}(AZURE)"){
-       sshagent(['${SITE1_USERNAME}']){
-         script{
-           try{
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider show -n Microsoft.Kubernetes -o table"
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider show -n Microsoft.ExtendedLocation -o table"
-           }catch(error){
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider show -n Microsoft.Kubernetes -o table"
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az provider show -n Microsoft.ExtendedLocation -o table"
-           }
-         }
-       }
-     }
+   
 
-   stage("Verify Arc Providers:KIND(AWS)"){
-       sshagent(['kind']){
-         script{
-           try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider show -n Microsoft.Kubernetes -o table"
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider show -n Microsoft.ExtendedLocation -o table"
-           }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider show -n Microsoft.Kubernetes -o table"
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider show -n Microsoft.ExtendedLocation -o table"
-           }
-         }
-       }
-     }
-
-   stage("Create Resource Group:${SITE1_USERNAME}(AZURE)"){
-       sshagent(['${SITE1_USERNAME}']){
-         script{
-           try{
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az group create --name ${SITE1_USERNAME}_azure --location EastUS --output table"
-           }catch(error){
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az group create --name ${SITE1_USERNAME}_azure --location EastUS --output table"
-           }
-         }
-       }
-     }
-
-   stage("Create Resource Group:KIND(AWS)"){
-       sshagent(['kind']){
-         script{
-           try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az group create --name kind_aws --location EastUS --output table"
-           }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az group create --name kind_aws --location EastUS --output table"
-           }
-         }
-       }
-     }
-
-   stage("Connect Existing K8s:${SITE1_USERNAME}(AZURE)"){
-       sshagent(['${SITE1_USERNAME}']){
-         script{
-           try{
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az connectedk8s connect --name Edge_Site-1 --resource-group ${SITE1_USERNAME}_azure"
-           }catch(error){
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} az connectedk8s connect --name Edge_Site-1 --resource-group ${SITE1_USERNAME}_azure"
-           }
-         }
-       }
-     }
-
-   stage("Connect Existing K8s:KIND(AWS)"){
-       sshagent(['kind']){
-         script{
-           try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
-           }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
-           }
-         }
-       }
-     }
-
-   stage("Service Account Token Authentication:${SITE1_USERNAME}(AZURE)"){
+   stage("Service Account Token Authentication:${USERNAME}"){
        sh "chmod +x token.sh"
-       sshagent(['${SITE1_USERNAME}']){
-         sh "scp -o StrictHostKeyChecking=no -q token.sh ${SITE1_USERNAME}@${SITE1_HOSTNAME}:/home/${SITE1_USERNAME}/"
+       sshagent(['${USERNAME}']){
+         sh "scp -o StrictHostKeyChecking=no -q token.sh ${USERNAME}@${IP}:/home/${USERNAME}/"
          script{
            try{
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no kubeadm@${SITE1_HOSTNAME} ./token.sh"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no kubeadm@${IP} ./token.sh"
            }catch(error){
-             sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} ./token.sh"
+             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} ./token.sh"
            }
          }
        }
      }
 
-   stage("Service Account Token Authentication:KIND(AWS)"){
-       sh "chmod +x token.sh"
-       sshagent(['kind']){
-         sh "scp -o StrictHostKeyChecking=no -q token.sh ${SITE2_USERNAME}@${SITE2_HOSTNAME}:/home/${SITE2_USERNAME}/"
-         script{
-           try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} ./token.sh"
-           }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} ./token.sh"
-           }
-         }
-       }
-     }
+   
 
-   stage('Deploy Opensips:${SITE1_USERNAME}(AZURE) ') {
-        sshagent(['${SITE1_USERNAME}']) {
+   stage('Deploy Opensips:${USERNAME}') {
+        sshagent(['${USERNAME}']) {
           script {
             try {
-              sh "sshpass -p ${SITE1_PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${SITE1_USERNAME}@${SITE1_HOSTNAME}:/home/${SITE1_USERNAME}/"
+              sh "sshpass -p ${PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${USERNAME}@${IP}:/home/${USERNAME}/"
               sh "sleep 2"
-              sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} kubectl apply -f opensips.yaml"
+              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} kubectl apply -f opensips.yaml"
             }catch(error){
-              sh "sshpass -p ${SITE1_PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${SITE1_USERNAME}@${SITE1_HOSTNAME}:/home/${SITE1_USERNAME}/"
+              sh "sshpass -p ${PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${USERNAME}@${IP}:/home/${USERNAME}/"
               sh "sleep 2"
-              sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} kubectl apply -f opensips.yaml"
+              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} kubectl apply -f opensips.yaml"
             }
           }
         }
       }
-    stage('Validate Opensips:${SITE1_USERNAME}(AZURE)') {
+    stage('Validate Opensips:${USERNAME}') {
         sh "chmod +x configure.sh"
-        sshagent(['${SITE1_USERNAME}']) {
-          sh "sshpass -p ${SITE1_PASSWORD} scp -o StrictHostKeyChecking=no -q configure.sh ${SITE1_USERNAME}@${SITE1_HOSTNAME}:/home/${SITE1_USERNAME}"
+        sshagent(['${USERNAME}']) {
+          sh "sshpass -p ${PASSWORD} scp -o StrictHostKeyChecking=no -q configure.sh ${USERNAME}@${IP}:/home/${USERNAME}"
           script {
             sh "sleep 20"
-            sh "sshpass -p ${SITE1_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE1_USERNAME}@${SITE1_HOSTNAME} ./configure.sh"
+            sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} ./configure.sh"
           }
         }
-      }
-   stage('Deploy Opensips:KIND(AWS)') {
-        sshagent(['kind']) {
-          script {
-            try {
-              sh "sshpass -p ${SITE2_PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${SITE2_USERNAME}@${SITE2_HOSTNAME}:/home/${SITE2_USERNAME}/"
-              sh "sleep 2"
-              sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} kubectl apply -f opensips.yaml"
-            }catch(error){
-              sh "sshpass -p ${SITE2_PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${SITE2_USERNAME}@${SITE2_HOSTNAME}:/home/${SITE2_USERNAME}/"
-              sh "sleep 2"
-              sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} kubectl apply -f opensips.yaml"
-            }
-          }
-        }
-      }
-
-   stage('Validate Opensips:KIND(AWS)') {
-        sh "chmod +x configure.sh"
-        sshagent(['kind']) {
-          sh "sshpass -p ${SITE2_PASSWORD} scp -o StrictHostKeyChecking=no -q configure.sh ${SITE2_USERNAME}@${SITE2_HOSTNAME}:/home/${SITE2_USERNAME}"
-          script {
-            sh "sleep 30"
-            sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} ./configure.sh"
-          }
-        }
-      }
-    }
+      } 
+ }
