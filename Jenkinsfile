@@ -69,7 +69,7 @@
      }
 
    
-   stage("Create Resource Group:${(AZURE)"){
+   stage("Create Resource Group"){
        sshagent(['${USERNAME}']){
          script{
            try{
