@@ -29,7 +29,7 @@ pipeline {
 // TO demonstrate real edge scenario credentials needs to be added before the execution.
    stage("Azure Cli:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['SITE1_USERNAME']){
+       sshagent(['kubeadm']){
          script{
            try{
              sh "ssh SITE1_USERNAME@SITE1_HOSTNAME curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
@@ -43,7 +43,7 @@ pipeline {
 
    stage("Azure Cli:KIND(AWS)"){
      steps{
-       sshagent(['kind']){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "ssh SITE2_USERNAME@SITE2_HOSTNAME curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
@@ -57,7 +57,7 @@ pipeline {
 
    stage("Connectedk8s Extension:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['SITE1_USERNAME']){
+       sshagent(['kubeadm']){
          script{
            try{
              sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az extension add --name connectedk8s"
@@ -71,7 +71,7 @@ pipeline {
 
    stage("Connectedk8s Extension:KIND(AWS)"){
      steps{
-       sshagent(['kind']){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az extension add --name connectedk8s"
@@ -85,7 +85,7 @@ pipeline {
 
    stage("Register Arc Providers:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['SITE1_USERNAME']){
+       sshagent(['kubeadm']){
          script{
            try{
              sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider register --namespace Microsoft.Kubernetes"
@@ -103,7 +103,7 @@ pipeline {
 
    stage("Register Arc Providers:KIND(AWS)"){
      steps{
-       sshagent(['kind']){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider register --namespace Microsoft.Kubernetes"
@@ -121,7 +121,7 @@ pipeline {
 
    stage("Verify Arc Providers:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['SITE1_USERNAME']){
+       sshagent(['kubeadm']){
          script{
            try{
              sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az provider show -n Microsoft.Kubernetes -o table"
@@ -139,7 +139,7 @@ pipeline {
 
    stage("Verify Arc Providers:KIND(AWS)"){
      steps{
-       sshagent(['kind']){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az provider show -n Microsoft.Kubernetes -o table"
@@ -157,7 +157,7 @@ pipeline {
 
    stage("Create Resource Group:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['SITE1_USERNAME']){
+       sshagent(['kubeadm']){
          script{
            try{
              sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az group create --name SITE1_USERNAME_azure --location EastUS --output table"
@@ -171,7 +171,7 @@ pipeline {
 
    stage("Create Resource Group:KIND(AWS)"){
      steps{
-       sshagent(['kind']){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az group create --name kind_aws --location EastUS --output table"
@@ -185,7 +185,7 @@ pipeline {
 
    stage("Connect Existing K8s:SITE1_USERNAME(AZURE)"){
      steps{
-       sshagent(['SITE1_USERNAME']){
+       sshagent(['kubeadm']){
          script{
            try{
              sh "ssh SITE1_USERNAME@SITE1_HOSTNAME az connectedk8s connect --name Edge_Site-1 --resource-group SITE1_USERNAME_azure"
@@ -199,7 +199,7 @@ pipeline {
 
    stage("Connect Existing K8s:KIND(AWS)"){
      steps{
-       sshagent(['kind']){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "ssh SITE2_USERNAME@SITE2_HOSTNAME az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
@@ -214,7 +214,7 @@ pipeline {
    stage("Service Account Token Authentication:SITE1_USERNAME(AZURE)"){
      steps{
        sh "chmod +x token.sh"
-       sshagent(['SITE1_USERNAME']){
+       sshagent(['kubeadm']){
          sh "scp -o StrictHostKeyChecking=no -q token.sh SITE1_USERNAME@SITE1_HOSTNAME:/home/SITE1_USERNAME/"
          script{
            try{
@@ -230,7 +230,7 @@ pipeline {
    stage("Service Account Token Authentication:KIND(AWS)"){
      steps{
        sh "chmod +x token.sh"
-       sshagent(['kind']){
+       sshagent(['ubuntu']){
          sh "scp -o StrictHostKeyChecking=no -q token.sh SITE2_USERNAME@SITE2_HOSTNAME:/home/SITE2_USERNAME/"
          script{
            try{
@@ -245,7 +245,7 @@ pipeline {
 
    stage('Deploy Opensips:SITE1_USERNAME(AZURE) ') {
       steps {
-        sshagent(['SITE1_USERNAME']) {
+        sshagent(['kubeadm']) {
           script {
             try {
               sh "scp -o StrictHostKeyChecking=no -q opensips.yaml SITE1_USERNAME@SITE1_HOSTNAME:/home/SITE1_USERNAME/"
@@ -263,7 +263,7 @@ pipeline {
     stage('Validate Opensips:SITE1_USERNAME(AZURE)') {
       steps {
         sh "chmod +x configure.sh"
-        sshagent(['SITE1_USERNAME']) {
+        sshagent(['kubeadm']) {
           sh "scp -o StrictHostKeyChecking=no -q configure.sh SITE1_USERNAME@SITE1_HOSTNAME:/home/SITE1_USERNAME"
           script {
             sh "sleep 20"
@@ -274,7 +274,7 @@ pipeline {
     }
    stage('Deploy Opensips:KIND(AWS)') {
       steps {
-        sshagent(['kind']) {
+        sshagent(['ubuntu']) {
           script {
             try {
               sh "scp -o StrictHostKeyChecking=no -q opensips.yaml SITE2_USERNAME@SITE2_HOSTNAME:/home/SITE2_USERNAME/"
@@ -293,7 +293,7 @@ pipeline {
    stage('Validate Opensips:KIND(AWS)') {
       steps {
         sh "chmod +x configure.sh"
-        sshagent(['kind']) {
+        sshagent(['ubuntu']) {
           sh "scp -o StrictHostKeyChecking=no -q configure.sh SITE2_USERNAME@SITE2_HOSTNAME:/home/SITE2_USERNAME"
           script {
             sh "sleep 30"
