@@ -9,7 +9,7 @@ pipeline {
     SITE1_USERNAME = "kubeadm"
     SITE1_PASSWORD = "kubeadm@1234"
 
-    SITE2_HOSTNAME = "13.234.34.254"
+    SITE2_HOSTNAME = "3.108.55.91"
     SITE2_USERNAME = "ubuntu"
     SITE2_PASSWORD = "ubuntu"
 
