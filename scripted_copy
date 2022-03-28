@@ -8,7 +8,7 @@
     def SITE1_USERNAME = "kubeadm"
     def SITE1_PASSWORD = "kubeadm@1234"
 
-    def SITE2_HOSTNAME = "3.111.41.173"
+    def SITE2_HOSTNAME = "3.108.55.91"
     def SITE2_USERNAME = "ubuntu"
     def SITE2_PASSWORD = "ubuntu"
 
