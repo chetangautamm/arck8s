@@ -29,8 +29,8 @@
       }
    }
 
-   stage("Azure Cli:KIND(AWS)"){
-       sshagent(['kind']){
+   stage("Azure Cli:ubuntu(AWS)"){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
@@ -53,8 +53,8 @@
        }
      }
 
-   stage("Connectedk8s Extension:KIND(AWS)"){
-       sshagent(['kind']){
+   stage("Connectedk8s Extension:ubuntu(AWS)"){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az extension add --name connectedk8s"
@@ -81,8 +81,8 @@
        }
      }
 
-   stage("Register Arc Providers:KIND(AWS)"){
-       sshagent(['kind']){
+   stage("Register Arc Providers:ubuntu(AWS)"){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider register --namespace Microsoft.Kubernetes"
@@ -113,8 +113,8 @@
        }
      }
 
-   stage("Verify Arc Providers:KIND(AWS)"){
-       sshagent(['kind']){
+   stage("Verify Arc Providers:ubuntu(AWS)"){
+       sshagent(['ubuntu']){
          script{
            try{
              sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az provider show -n Microsoft.Kubernetes -o table"
@@ -141,13 +141,13 @@
        }
      }
 
-   stage("Create Resource Group:KIND(AWS)"){
-       sshagent(['kind']){
+   stage("Create Resource Group:ubuntu(AWS)"){
+       sshagent(['ubuntu']){
          script{
            try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az group create --name kind_aws --location EastUS --output table"
+             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az group create --name ubuntu_aws --location EastUS --output table"
            }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az group create --name kind_aws --location EastUS --output table"
+             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az group create --name ubuntu_aws --location EastUS --output table"
            }
          }
        }
@@ -165,13 +165,13 @@
        }
      }
 
-   stage("Connect Existing K8s:KIND(AWS)"){
-       sshagent(['kind']){
+   stage("Connect Existing K8s:ubuntu(AWS)"){
+       sshagent(['ubuntu']){
          script{
            try{
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
+             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az connectedk8s connect --name Edge_Site-2 --resource-group ubuntu_aws"
            }catch(error){
-             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az connectedk8s connect --name Edge_Site-2 --resource-group kind_aws"
+             sh "sshpass -p ${SITE2_PASSWORD} ssh -o StrictHostKeyChecking=no ${SITE2_USERNAME}@${SITE2_HOSTNAME} az connectedk8s connect --name Edge_Site-2 --resource-group ubuntu_aws"
            }
          }
        }
@@ -191,9 +191,9 @@
        }
      }
 
-   stage("Service Account Token Authentication:KIND(AWS)"){
+   stage("Service Account Token Authentication:ubuntu(AWS)"){
        sh "chmod +x token.sh"
-       sshagent(['kind']){
+       sshagent(['ubuntu']){
          sh "scp -o StrictHostKeyChecking=no -q token.sh ${SITE2_USERNAME}@${SITE2_HOSTNAME}:/home/${SITE2_USERNAME}/"
          script{
            try{
@@ -230,8 +230,8 @@
           }
         }
       }
-   stage('Deploy Opensips:KIND(AWS)') {
-        sshagent(['kind']) {
+   stage('Deploy Opensips:ubuntu(AWS)') {
+        sshagent(['ubuntu']) {
           script {
             try {
               sh "sshpass -p ${SITE2_PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${SITE2_USERNAME}@${SITE2_HOSTNAME}:/home/${SITE2_USERNAME}/"
@@ -246,9 +246,9 @@
         }
       }
 
-   stage('Validate Opensips:KIND(AWS)') {
+   stage('Validate Opensips:ubuntu(AWS)') {
         sh "chmod +x configure.sh"
-        sshagent(['kind']) {
+        sshagent(['ubuntu']) {
           sh "sshpass -p ${SITE2_PASSWORD} scp -o StrictHostKeyChecking=no -q configure.sh ${SITE2_USERNAME}@${SITE2_HOSTNAME}:/home/${SITE2_USERNAME}"
           script {
             sh "sleep 30"
