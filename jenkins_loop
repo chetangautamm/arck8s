@@ -55,12 +55,13 @@ node {
             //     echo "value of user_list item is ${sample}"
             //     echo "trigerring global_var pipeline"
             // }
+        ctr = 0
         for (block in conf) {
-            //def user_list = block.username
+            def user_list = conf.block.username
             def ip_list = conf.block.ip
             def password_list = conf.block.password
 
-            echo conf.block.username
+            echo "${user_list}"
             echo "${ip_list}"
             echo "${password_list}"
             //echo 'inside for loop'
