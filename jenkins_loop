@@ -1,4 +1,4 @@
-def tstage(block) {
+/*def tstage(block) {
     def conf = readYaml file: "sites.yaml"
             //echo 'inside for loop'
             def user_list = conf.block.username
@@ -6,22 +6,21 @@ def tstage(block) {
             def password_list = conf.block.password
             //echo "user list is ${user_list}"
             def ctr = user_list.size()
-            //echo "ctr is ${ctr}"
+            echo "ctr is ${ctr}"
             for (i=0;i<ctr;i++)
             {  
                 def sample = user_list.get(i)
-                //echo "value of i is ${i}"
-                //echo "value of user_list item is ${sample}"
-        echo "trigerring global_var pipeline"
-        build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${user_list.get(i)}"),string(name: 'PASSWORD', value: "${password_list.get(i)}"),string(name: 'IP', value: "${ip_list.get(i)}")],propagate: false
+                echo "value of i is ${i}"
+                echo "value of user_list item is ${sample}"
+                echo "trigerring global_var pipeline"
+                build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${user_list.get(i)}"),string(name: 'PASSWORD', value: "${password_list.get(i)}"),string(name: 'IP', value: "${ip_list.get(i)}")],propagate: false
             }
             /*list.each { item ->
         sh "echo Hello ${item}"*/
             //echo tstage(block)
             /*for (txt in conf) {
-                sh "echo ${txt[1]}"}*/
-    }
-
+                sh "echo ${txt[1]}"}
+    }*/
  
 
 node {  
@@ -44,7 +43,25 @@ node {
         for (element in map) {
          echo "${element.key} ${element.value}"
 }*/
+            def conf = readYaml file: "sites.yaml"
+            //echo 'inside for loop'
+            //echo "user list is ${user_list}"
+            def ctr = user_list.size()
+            echo "ctr is ${ctr}"
+            for (i=0;i<ctr;i++)
+            {  
+                def sample = user_list.get(i)
+                echo "value of i is ${i}"
+                echo "value of user_list item is ${sample}"
+                echo "trigerring global_var pipeline"
         for (block in conf) {
+            def user_list = block.username
+            def ip_list = block.ip
+            def password_list = block.password
+
+            echo "${user_list}"
+            echo "${ip_list}"
+            echo "${password_list}"
             //echo 'inside for loop'
             //echo "${block}"
             echo tstage(block)         
