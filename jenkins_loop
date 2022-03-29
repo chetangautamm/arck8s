@@ -56,16 +56,16 @@ node {
             //     echo "trigerring global_var pipeline"
             // }
         for (block in conf) {
-            def user_list = block.username
+            //def user_list = block.username
             def ip_list = block.ip
             def password_list = block.password
 
-            echo "${user_list}"
+            echo block.username
             echo "${ip_list}"
             echo "${password_list}"
             //echo 'inside for loop'
             //echo "${block}"
-            echo tstage(block)         
+            //echo tstage(block)         
         }
     }
   }
