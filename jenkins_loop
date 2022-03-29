@@ -75,7 +75,7 @@ node {
             ctr= ctr+1
             //echo 'inside for loop'
             //echo "${block}"
-            echo tstage(block,temp_user,temp_pass,temp_ip)         
+            tstage(block,temp_user,temp_pass,temp_ip)         
         }
     }
   }
