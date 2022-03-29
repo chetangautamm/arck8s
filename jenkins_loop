@@ -23,8 +23,8 @@ def tstage(block,temp_user,temp_pass,temp_ip) {
         sh "echo Hello ${item}"*/
             //echo tstage(block)
             /*for (txt in conf) {
-                sh "echo ${txt[1]}"}
-    }*/
+                sh "echo ${txt[1]}"}*/
+    }
  
 
 node {  
