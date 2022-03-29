@@ -1,64 +1,64 @@
-def tstage(block,temp_user,temp_pass,temp_ip) {  
+def tstage(block,temp_user,temp_pass,temp_temp_ip) {  
     echo "inside tstage :${temp_user}"
     echo "inside tstage :${temp_pass}"
-    echo "inside tstage :${temp_ip}"
+    echo "inside tstage :${temp_temp_ip}"
 
     //Stage for addition of k8s cluster on arc
 
-    stage("Azure Cli:${USERNAME}"){
-       sshagent(["${USERNAME}"]){
-         script{
+    stage("Azure Cli:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         scrtemp_ipt{
            try{
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }catch(error){
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
            }
          }
       }
    }
 
 
-   stage("Connectedk8s Extension:${USERNAME}"){
-       sshagent(["${USERNAME}"]){
-         script{
+   stage("Connectedk8s Extension:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         scrtemp_ipt{
            try{
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az extension add --name connectedk8s"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az extension add --name connectedk8s"
            }catch(error){
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az extension add --name connectedk8s"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az extension add --name connectedk8s"
            }
          }
        }
      }
 
 
-   stage("Register Arc Providers:${USERNAME}"){
-       sshagent(["${USERNAME}"]){
-         script{
+   stage("Register Arc Providers:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         scrtemp_ipt{
            try{
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.Kubernetes"
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.ExtendedLocation"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.Kubernetes"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.ExtendedLocation"
            }catch(error){
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.Kubernetes"
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.KubernetesConfiguration"
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider register --namespace Microsoft.ExtendedLocation"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.Kubernetes"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.ExtendedLocation"
            }
          }
        }
      }
 
 
-   stage("Verify Arc Providers:${USERNAME}"){
-       sshagent(["${USERNAME}"]){
-         script{
+   stage("Verify Arc Providers:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         scrtemp_ipt{
            try{
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.Kubernetes -o table"
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.ExtendedLocation -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.Kubernetes -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.ExtendedLocation -o table"
            }catch(error){
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.Kubernetes -o table"
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.KubernetesConfiguration -o table"
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az provider show -n Microsoft.ExtendedLocation -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.Kubernetes -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.ExtendedLocation -o table"
            }
          }
        }
@@ -66,25 +66,25 @@ def tstage(block,temp_user,temp_pass,temp_ip) {
 
    
    stage("Create Resource Group"){
-       sshagent(["${USERNAME}"]){
-         script{
+       sshagent(["${temp_user}"]){
+         scrtemp_ipt{
            try{
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az group create --name ${USERNAME}_azure --location EastUS --output table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_azure --location EastUS --output table"
            }catch(error){
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az group create --name ${USERNAME}_azure --location EastUS --output table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_azure --location EastUS --output table"
            }
          }
        }
      }
 
    
-   stage("Connect Existing K8s:${USERNAME}"){
-       sshagent(["${USERNAME}"]){
-         script{
+   stage("Connect Existing K8s:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         scrtemp_ipt{
            try{
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az connectedk8s connect --name Edge_Site-1 --resource-group ${USERNAME}_azure"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-1 --resource-group ${temp_user}_azure"
            }catch(error){
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} az connectedk8s connect --name Edge_Site-1 --resource-group ${USERNAME}_azure"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-1 --resource-group ${temp_user}_azure"
            }
          }
        }
@@ -92,15 +92,15 @@ def tstage(block,temp_user,temp_pass,temp_ip) {
 
    
 
-   stage("Service Account Token Authentication:${USERNAME}"){
+   stage("Service Account Token Authentication:${temp_user}"){
        sh "chmod +x token.sh"
-       sshagent(["${USERNAME}"]){
-         sh "scp -o StrictHostKeyChecking=no -q token.sh ${USERNAME}@${IP}:/home/${USERNAME}/"
-         script{
+       sshagent(["${temp_user}"]){
+         sh "scp -o StrictHostKeyChecking=no -q token.sh ${temp_user}@${temp_ip}:/home/${temp_user}/"
+         scrtemp_ipt{
            try{
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no kubeadm@${IP} ./token.sh"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no kubeadm@${temp_ip} ./token.sh"
            }catch(error){
-             sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} ./token.sh"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./token.sh"
            }
          }
        }
@@ -108,28 +108,28 @@ def tstage(block,temp_user,temp_pass,temp_ip) {
 
    
 
-   stage("Deploy Opensips:${USERNAME}") {
-        sshagent(["${USERNAME}"]) {
-          script {
+   stage("Deploy Openstemp_ips:${temp_user}") {
+        sshagent(["${temp_user}"]) {
+          scrtemp_ipt {
             try {
-              sh "sshpass -p ${PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${USERNAME}@${IP}:/home/${USERNAME}/"
+              sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q openstemp_ips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
               sh "sleep 2"
-              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} kubectl apply -f opensips.yaml"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} kubectl apply -f openstemp_ips.yaml"
             }catch(error){
-              sh "sshpass -p ${PASSWORD} scp -o StrictHostKeyChecking=no -q opensips.yaml ${USERNAME}@${IP}:/home/${USERNAME}/"
+              sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q openstemp_ips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
               sh "sleep 2"
-              sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} kubectl apply -f opensips.yaml"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} kubectl apply -f openstemp_ips.yaml"
             }
           }
         }
       }
-    stage('Validate Opensips:${USERNAME}') {
+    stage('Validate Openstemp_ips:${temp_user}') {
         sh "chmod +x configure.sh"
-        sshagent(["${USERNAME}"]) {
-          sh "sshpass -p ${PASSWORD} scp -o StrictHostKeyChecking=no -q configure.sh ${USERNAME}@${IP}:/home/${USERNAME}"
-          script {
+        sshagent(["${temp_user}"]) {
+          sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q configure.sh ${temp_user}@${temp_ip}:/home/${temp_user}"
+          scrtemp_ipt {
             sh "sleep 20"
-            sh "sshpass -p ${PASSWORD} ssh -o StrictHostKeyChecking=no ${USERNAME}@${IP} ./configure.sh"
+            sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./configure.sh"
           }
         }
       } 
@@ -144,22 +144,22 @@ node {
     stage('load data') {
         def conf = readYaml file: "sites.yaml"
         ctr = 0
-        def user_list = conf.block.username
-        def ip_list = conf.block.ip
-        def password_list = conf.block.password
+        def user_list = conf.block.temp_user
+        def temp_ip_list = conf.block.temp_ip
+        def temp_pass_list = conf.block.temp_pass
 
         for (block in conf) {
             temp_user = user_list.get(ctr)
-            temp_ip = ip_list.get(ctr)
-            temp_pass = password_list.get(ctr)
+            temp_temp_ip = temp_ip_list.get(ctr)
+            temp_pass = temp_pass_list.get(ctr)
 
             echo "${temp_user}"
-            echo "${temp_ip}"
+            echo "${temp_temp_ip}"
             echo "${temp_pass}"
 
             ctr= ctr+1
 
-            tstage(block,temp_user,temp_pass,temp_ip)         
+            tstage(block,temp_user,temp_pass,temp_temp_ip)         
         }
     }
   }
