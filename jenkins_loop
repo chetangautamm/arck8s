@@ -1,20 +1,24 @@
-/*def tstage(block) {
-    def conf = readYaml file: "sites.yaml"
-            //echo 'inside for loop'
-            def user_list = conf.block.username
-            def ip_list = conf.block.ip
-            def password_list = conf.block.password
-            //echo "user list is ${user_list}"
-            def ctr = user_list.size()
-            echo "ctr is ${ctr}"
-            for (i=0;i<ctr;i++)
-            {  
-                def sample = user_list.get(i)
-                echo "value of i is ${i}"
-                echo "value of user_list item is ${sample}"
-                echo "trigerring global_var pipeline"
-                build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${user_list.get(i)}"),string(name: 'PASSWORD', value: "${password_list.get(i)}"),string(name: 'IP', value: "${ip_list.get(i)}")],propagate: false
-            }
+def tstage(block,temp_user,temp_pass,temp_ip) {
+    // def conf = readYaml file: "sites.yaml"
+    //         //echo 'inside for loop'
+    //         def user_list = conf.block.username
+    //         def ip_list = conf.block.ip
+    //         def password_list = conf.block.password
+    //         //echo "user list is ${user_list}"
+    //         def ctr = user_list.size()
+    //         echo "ctr is ${ctr}"
+            // for (i=0;i<ctr;i++)
+            // {  
+                // def sample = user_list.get(i)
+                // echo "value of i is ${i}"
+                // echo "value of user_list item is ${sample}"
+                // echo "trigerring global_var pipeline"
+    echo "inside tstage :${temp_user}"
+    echo "inside tstage :${temp_pass}"
+    echo "inside tstage :${temp_ip}"
+    build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${temp_user}"),string(name: 'PASSWORD', value: "${temp_pass}"),string(name: 'IP', value: "${temp_ip}")],propagate: false
+    //build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${user_list.get(i)}"),string(name: 'PASSWORD', value: "${password_list.get(i)}"),string(name: 'IP', value: "${ip_list.get(i)}")],propagate: false
+            // }
             /*list.each { item ->
         sh "echo Hello ${item}"*/
             //echo tstage(block)
@@ -71,7 +75,7 @@ node {
             ctr= ctr+1
             //echo 'inside for loop'
             //echo "${block}"
-            //echo tstage(block)         
+            echo tstage(block,temp_user,temp_pass,temp_ip)         
         }
     }
   }
