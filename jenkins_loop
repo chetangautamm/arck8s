@@ -56,10 +56,13 @@ node {
             //     echo "trigerring global_var pipeline"
             // }
         ctr = 0
+        def user_list = conf.block.username
+        def ip_list = conf.block.ip
+        def password_list = conf.block.password
         for (block in conf) {
-            def user_list = conf.block.username
-            def ip_list = conf.block.ip
-            def password_list = conf.block.password
+            temp_user = user_list.get(ctr)
+            temp_ip = ip_list.get(ctr)
+            temp_pass = password_list.get(ctr)
 
             echo "${user_list}"
             echo "${ip_list}"
