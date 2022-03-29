@@ -57,10 +57,10 @@ node {
             // }
         for (block in conf) {
             //def user_list = block.username
-            def ip_list = block.ip
-            def password_list = block.password
+            def ip_list = conf.block.ip
+            def password_list = conf.block.password
 
-            //echo block.username
+            echo conf.block.username
             echo "${ip_list}"
             echo "${password_list}"
             //echo 'inside for loop'
