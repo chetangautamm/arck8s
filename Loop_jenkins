@@ -1,8 +1,8 @@
-def tstage(block,temp_user,temp_pass,temp_ip) {  
+def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {  
     echo "inside tstage :${temp_user}"
     echo "inside tstage :${temp_pass}"
     echo "inside tstage :${temp_ip}"
-
+    temp_ctr= temp_ctr+1
     //Stage for addition of k8s cluster on arc
 
     stage("Azure Cli:${temp_user}"){
@@ -69,9 +69,9 @@ def tstage(block,temp_user,temp_pass,temp_ip) {
        sshagent(["${temp_user}"]){
          script{
            try{
-             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_azure --location EastUS --output table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
            }catch(error){
-             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_azure --location EastUS --output table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
            }
          }
        }
@@ -82,9 +82,9 @@ def tstage(block,temp_user,temp_pass,temp_ip) {
        sshagent(["${temp_user}"]){
          script{
            try{
-             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-1 --resource-group ${temp_user}_azure"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc"
            }catch(error){
-             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-1 --resource-group ${temp_user}_azure"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc"
            }
          }
        }
@@ -159,7 +159,7 @@ node {
 
             ctr= ctr+1
 
-            tstage(block,temp_user,temp_pass,temp_ip)         
+            tstage(block,temp_user,temp_pass,temp_ip,ctr)         
         }
     }
   }
