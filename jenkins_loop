@@ -64,9 +64,11 @@ node {
             temp_ip = ip_list.get(ctr)
             temp_pass = password_list.get(ctr)
 
-            echo "${user_list}"
-            echo "${ip_list}"
-            echo "${password_list}"
+            echo "${temp_user}"
+            echo "${temp_ip}"
+            echo "${temp_pass}"
+
+            ctr= ctr+1
             //echo 'inside for loop'
             //echo "${block}"
             //echo tstage(block)         
