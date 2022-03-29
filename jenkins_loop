@@ -54,6 +54,7 @@ node {
                 echo "value of i is ${i}"
                 echo "value of user_list item is ${sample}"
                 echo "trigerring global_var pipeline"
+            }
         for (block in conf) {
             def user_list = block.username
             def ip_list = block.ip
