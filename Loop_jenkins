@@ -98,7 +98,7 @@ def tstage(block,temp_user,temp_pass,temp_ip) {
          sh "scp -o StrictHostKeyChecking=no -q token.sh ${temp_user}@${temp_ip}:/home/${temp_user}/"
          script{
            try{
-             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no kubeadm@${temp_ip} ./token.sh"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./token.sh"
            }catch(error){
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./token.sh"
            }
