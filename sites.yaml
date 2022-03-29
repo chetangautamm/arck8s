@@ -1,7 +1,7 @@
 ---
 block:
   message: "First Stage"
-  ip: "3.108.55.91"
+  ip: "13.234.31.54"
   username: "ubuntu"
   password: "ubuntu"
   

@@ -16,7 +16,7 @@ def tstage(block,temp_user,temp_pass,temp_ip) {
     echo "inside tstage :${temp_user}"
     echo "inside tstage :${temp_pass}"
     echo "inside tstage :${temp_ip}"
-    //build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${temp_user}"),string(name: 'PASSWORD', value: "${temp_pass}"),string(name: 'IP', value: "${temp_ip}")],propagate: false
+    build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${temp_user}"),string(name: 'PASSWORD', value: "${temp_pass}"),string(name: 'IP', value: "${temp_ip}")],propagate: false
     //build job: 'global_var',parameters: [string(name: 'USERNAME', value: "${user_list.get(i)}"),string(name: 'PASSWORD', value: "${password_list.get(i)}"),string(name: 'IP', value: "${ip_list.get(i)}")],propagate: false
             // }
             /*list.each { item ->
