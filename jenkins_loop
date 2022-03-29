@@ -46,15 +46,15 @@ node {
             //def conf = readYaml file: "sites.yaml"
             //echo 'inside for loop'
             //echo "user list is ${user_list}"
-            def ctr = user_list.size()
-            echo "ctr is ${ctr}"
-            for (i=0;i<ctr;i++)
-            {  
-                def sample = user_list.get(i)
-                echo "value of i is ${i}"
-                echo "value of user_list item is ${sample}"
-                echo "trigerring global_var pipeline"
-            }
+            //def ctr = user_list.size()
+            // echo "ctr is ${ctr}"
+            // for (i=0;i<ctr;i++)
+            // {  
+            //     def sample = user_list.get(i)
+            //     echo "value of i is ${i}"
+            //     echo "value of user_list item is ${sample}"
+            //     echo "trigerring global_var pipeline"
+            // }
         for (block in conf) {
             def user_list = block.username
             def ip_list = block.ip
