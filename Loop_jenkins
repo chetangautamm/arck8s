@@ -144,9 +144,9 @@ node {
     stage('load data') {
         def conf = readYaml file: "sites.yaml"
         ctr = 0
-        def user_list = conf.block.temp_user
-        def temp_ip_list = conf.block.temp_ip
-        def temp_pass_list = conf.block.temp_pass
+        def user_list = conf.block.username
+        def temp_ip_list = conf.block.ip
+        def temp_pass_list = conf.block.password
 
         for (block in conf) {
             temp_user = user_list.get(ctr)
