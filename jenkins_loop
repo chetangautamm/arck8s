@@ -60,7 +60,7 @@ node {
             def ip_list = block.ip
             def password_list = block.password
 
-            echo block.username
+            //echo block.username
             echo "${ip_list}"
             echo "${password_list}"
             //echo 'inside for loop'
