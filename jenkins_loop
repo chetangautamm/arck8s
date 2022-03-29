@@ -43,7 +43,7 @@ node {
         for (element in map) {
          echo "${element.key} ${element.value}"
 }*/
-            def conf = readYaml file: "sites.yaml"
+            //def conf = readYaml file: "sites.yaml"
             //echo 'inside for loop'
             //echo "user list is ${user_list}"
             def ctr = user_list.size()
