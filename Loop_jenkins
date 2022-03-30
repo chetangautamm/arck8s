@@ -123,7 +123,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
           }
         }
       }
-    stage('Validate Opensips:${temp_user}') {
+    stage("Validate Opensips:${temp_user}") {
         sh "chmod +x configure.sh"
         sshagent(["${temp_user}"]) {
           sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q configure.sh ${temp_user}@${temp_ip}:/home/${temp_user}"
