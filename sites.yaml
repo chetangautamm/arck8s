@@ -1,13 +1,14 @@
 ---
 block:
+  message: "Second Stage"
+  ip: "20.193.238.113"
+  username: "kubeadm"
+  password: "kubeadm@1234"
+---
+block:
   message: "First Stage"
   ip: "13.232.168.70"
   username: "ubuntu"
   password: "ubuntu"
   
----
-block:
-  message: "Second Stage"
-  ip: "20.193.238.113"
-  username: "kubeadm"
-  password: "kubeadm@1234"
+
