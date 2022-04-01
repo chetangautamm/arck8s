@@ -20,7 +20,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            try{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az login --service-principal -u 1471aa7b-4655-4819-83bc-c52f97ccb68a -p Su87Q~toU_wq10kDaTSxBf1EF7bPHgYzrpdyf --tenant cb1d2f78-9e60-4a54-af15-ae11c5410d4c"
            }catch(error){
-             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az login --service-principal -u 1471aa7b-4655-4819-83bc-c52f97ccb68a -p Su87Q~toU_wq10kDaTSxBf1EF7bPHgYzrpdyf --tenant cb1d2f78-9e60-4a54-af15-ae11c5410d4c""
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az login --service-principal -u 1471aa7b-4655-4819-83bc-c52f97ccb68a -p Su87Q~toU_wq10kDaTSxBf1EF7bPHgYzrpdyf --tenant cb1d2f78-9e60-4a54-af15-ae11c5410d4c"
            }
          }
       }
