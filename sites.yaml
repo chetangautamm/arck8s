@@ -19,11 +19,5 @@ block:
   username: "k8suser"
   password: "Kubernetes@1234"
 
----
-block:
-  message: "Fourth Stage"
-  ip: "65.1.112.180"
-  username: "ubuntu"
-  password: "ubuntu"
   
 

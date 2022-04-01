@@ -6,7 +6,6 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
     //Stage for addition of k8s cluster on arc
 
     stage("Azure Cli:${temp_user}"){
-       sshagent(["${temp_user}"]){
          script{
            try{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
@@ -15,11 +14,10 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            }
          }
       }
-   }
+
 
 
    stage("Connectedk8s Extension:${temp_user}"){
-       sshagent(["${temp_user}"]){
          script{
            try{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az extension add --name connectedk8s"
@@ -28,11 +26,9 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            }
          }
        }
-     }
 
 
    stage("Register Arc Providers:${temp_user}"){
-       sshagent(["${temp_user}"]){
          script{
            try{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.Kubernetes"
@@ -45,11 +41,9 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            }
          }
        }
-     }
 
 
    stage("Verify Arc Providers:${temp_user}"){
-       sshagent(["${temp_user}"]){
          script{
            try{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.Kubernetes -o table"
@@ -62,11 +56,9 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            }
          }
        }
-     }
 
    
    stage("Create Resource Group"){
-       sshagent(["${temp_user}"]){
          script{
            try{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
@@ -75,11 +67,9 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            }
          }
        }
-     }
 
    
    stage("Connect Existing K8s:${temp_user}"){
-       sshagent(["${temp_user}"]){
          script{
            try{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc"
@@ -88,13 +78,11 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            }
          }
        }
-     }
 
    
 
    stage("Service Account Token Authentication:${temp_user}"){
        sh "chmod +x token.sh"
-       sshagent(["${temp_user}"]){
          sh "scp -o StrictHostKeyChecking=no -q token.sh ${temp_user}@${temp_ip}:/home/${temp_user}/"
          script{
            try{
@@ -104,12 +92,10 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            }
          }
        }
-     }
 
    
 
    stage("Deploy Opensips:${temp_user}") {
-        sshagent(["${temp_user}"]) {
           script {
             try {
               sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q opensips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
@@ -122,18 +108,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
             }
           }
         }
-      }
-    /*stage("Validate Opensips:${temp_user}") {
-        sh "chmod +x configure.sh"
-        sshagent(["${temp_user}"]) {
-          sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q configure.sh ${temp_user}@${temp_ip}:/home/${temp_user}"
-          script {
-            sh "sleep 20"
-            sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./configure.sh"
-          }
-        }
-      }*/ 
-}
+    }
  
 node {  
 
