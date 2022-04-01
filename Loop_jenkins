@@ -2,7 +2,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
     echo "inside tstage :${temp_user}"
     echo "inside tstage :${temp_pass}"
     echo "inside tstage :${temp_ip}"
-    temp_ctr= temp_ctr+1
+    temp_ctr= temp_ctr
     //Stage for addition of k8s cluster on arc
 
     stage("Azure Cli:${temp_user}"){
