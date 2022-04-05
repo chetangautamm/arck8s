@@ -5,6 +5,13 @@ block:
   username: "kubeadm"
   password: "kubeadm@1234"
 
+---
+block:
+  message: "Second Site"
+  ip: "52.172.221.4"
+  username: "k8suser"
+  password: "Kubernetes@1234"
+
 
 
 
