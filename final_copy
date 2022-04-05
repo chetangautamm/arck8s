@@ -1,0 +1,155 @@
+def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {  
+    echo "inside tstage :${temp_user}"
+    echo "inside tstage :${temp_pass}"
+    echo "inside tstage :${temp_ip}"
+    temp_ctr= temp_ctr+1
+    //Stage for addition of k8s cluster on arc
+
+    stage("Azure Cli:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash"
+           }
+         }
+      }
+   }
+
+
+   stage("Connectedk8s Extension:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az extension add --name connectedk8s"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az extension add --name connectedk8s"
+           }
+         }
+       }
+     }
+
+
+   stage("Register Arc Providers:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.Kubernetes"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.ExtendedLocation"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.Kubernetes"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.KubernetesConfiguration"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider register --namespace Microsoft.ExtendedLocation"
+           }
+         }
+       }
+     }
+
+
+   stage("Verify Arc Providers:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.Kubernetes -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.ExtendedLocation -o table"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.Kubernetes -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.KubernetesConfiguration -o table"
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az provider show -n Microsoft.ExtendedLocation -o table"
+           }
+         }
+       }
+     }
+
+   
+   stage("Create Resource Group"){
+       sshagent(["${temp_user}"]){
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
+           }
+         }
+       }
+     }
+
+   
+   stage("Connect Existing K8s:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc"
+           }
+         }
+       }
+     }
+
+   
+
+   stage("Service Account Token Authentication:${temp_user}"){
+       sh "chmod +x token.sh"
+       sshagent(["${temp_user}"]){
+         sh "scp -o StrictHostKeyChecking=no -q token.sh ${temp_user}@${temp_ip}:/home/${temp_user}/"
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./token.sh"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./token.sh"
+           }
+         }
+       }
+     }
+
+   
+
+   stage("Deploy Opensips:${temp_user}") {
+        sshagent(["${temp_user}"]) {
+          script {
+            try {
+              sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q opensips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
+              sh "sleep 2"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} kubectl apply -f opensips.yaml"
+            }catch(error){
+              sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q opensips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
+              sh "sleep 2"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} kubectl apply -f opensips.yaml"
+            }
+          }
+        }
+      }
+}
+ 
+node {  
+
+    stage('Checkout Source Code') {
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
+    }
+
+    stage('load data') {
+        def conf = readYaml file: "sites.yaml"
+        ctr = 0
+        def user_list = conf.block.username
+        def temp_ip_list = conf.block.ip
+        def temp_pass_list = conf.block.password
+
+        for (block in conf) {
+            temp_user = user_list.get(ctr)
+            temp_ip = temp_ip_list.get(ctr)
+            temp_pass = temp_pass_list.get(ctr)
+
+            echo "${temp_user}"
+            echo "${temp_ip}"
+            echo "${temp_pass}"
+
+            ctr= ctr+1
+
+            tstage(block,temp_user,temp_pass,temp_ip,ctr)         
+        }
+    }
+  }
