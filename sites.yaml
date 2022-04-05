@@ -1,22 +1,13 @@
 ---
 block:
-  message: "First Stage"
+  message: "First Site"
   ip: "20.193.238.113"
   username: "kubeadm"
   password: "kubeadm@1234"
 
----
-block:
-  message: "Second Stage"
-  ip: "20.193.239.123"
-  username: "kubeadm"
-  password: "kubeadm@1234"
 
----
-block:
-  message: "Third Stage"
-  ip: "52.172.221.4"
-  username: "k8suser"
-  password: "Kubernetes@1234"
+
+
+
 
   
