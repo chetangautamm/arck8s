@@ -71,7 +71,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
  
    stage("Create Resource Group"){
          script{
-           def rg = sh script: "sshpass -p kubeadm@1234 ssh -o StrictHostKeyChecking=no kubeadm@20.193.238.113 az group list  -o table | grep kubeadm | awk '{print $1}'", returnStatus: true
+           def rg = sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group list  -o table | grep ${temp_user} | awk '{print $1}'"
            if (rg == '${temp_user}'){
              echo "Resource Group is already Present"
            }else{
