@@ -68,17 +68,27 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
        }
 
    
+  #  stage("Create Resource Group"){
+  #        script{
+  #          try{
+  #            sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
+  #          }catch(error){
+  #            sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
+  #          }
+  #        }
+  #      }
    stage("Create Resource Group"){
          script{
-           try{
-             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
-           }catch(error){
+           def rg = sh script: "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group list  -o table | grep ${temp_user}_arc | awk '{print $1}'", returnStatus: true
+           if (rg == '${temp_user}_arc'){
+             echo "Resource Group is already Present"
+           }else{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
            }
          }
        }
 
-   
+    
    stage("Connect Existing K8s:${temp_user}"){
          script{
            try{
