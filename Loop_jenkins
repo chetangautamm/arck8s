@@ -70,14 +70,14 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
    
  
    stage("Create Resource Group"){
-           sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group list  -o table | awk '{print $1}'"
+           script{
            if (rg == '${temp_user}'){
              echo "Resource Group is already Present"
            }else{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user} --location EastUS --output table"
            }
          }
-       
+   }
 
     
    stage("Connect Existing K8s:${temp_user}"){
