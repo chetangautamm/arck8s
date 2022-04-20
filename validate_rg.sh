@@ -1,2 +1,2 @@
 #!/bin/bash
-az group list  -o table | grep AzureArcTest | awk '{print $1}'
+az group list  --output table | grep kubeadm | awk '{print $1}'
