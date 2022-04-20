@@ -78,7 +78,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            if (rg == '${temp_user}'){
              echo "Resource Group is already Present"
            }else{
-             echo "Resource Group is not already Present
+             echo "Resource Group is not already Present"
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_new --location EastUS --output table"
            }
          }
