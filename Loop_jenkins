@@ -74,7 +74,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
          sh "scp -o StrictHostKeyChecking=no -q validate_rg.sh ${temp_user}@${temp_ip}:/home/${temp_user}/"
           script{
           sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./validate_rg.sh"
-           def rg = sh script: 'sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./validate_rg.sh', returnStatus: true
+           def rg = sh script: 'sshpass -p ${temp_pass} ssh ${temp_user}@${temp_ip} ./validate_rg.sh', returnStatus: true
            if (rg == '${temp_user}'){
              echo "Resource Group is already Present"
            }else{
