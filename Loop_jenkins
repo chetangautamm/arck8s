@@ -73,8 +73,8 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
      sh "chmod +x validate_rg.sh"
          sh "scp -o StrictHostKeyChecking=no -q validate_rg.sh ${temp_user}@${temp_ip}:/home/${temp_user}/"
           script{
-          sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./validate_rg.sh"
-           def rg = sh script: "sshpass -p ${temp_pass} ssh ${temp_user}@${temp_ip} ./validate_rg.sh",  returnStdout: true
+          sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} ./validate_rg.sh kubeadm_adm"
+           def rg = sh script: "sshpass -p ${temp_pass} ssh ${temp_user}@${temp_ip} ./validate_rg.sh kubeadm_new",  returnStdout: true
            echo "Variable value:${rg}"
            if ("${rg}" == "kubeadm_new"){
              echo "Resource Group is already Present"
@@ -88,6 +88,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
     
    stage("Connect Existing K8s:${temp_user}"){
          script{
+          #  az resource list -g AzureArcTest
            try{
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az connectedk8s connect --name Edge_Site-${temp_ctr} --resource-group ${temp_user}"
            }catch(error){
