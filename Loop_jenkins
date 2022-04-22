@@ -78,7 +78,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            echo "Variable value:${rg}"
            def compare = "${temp_user}_test1"
            println("comapre is"+compare)
-           if (rg == compare){
+           if(rg == compare){
              println("rg is :"+ rg )
              println("temp_user is:"+ temp_user)
              echo "Resource Group is already Present"
