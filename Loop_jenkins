@@ -78,6 +78,8 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
            echo "Variable value:${rg}"
            def compare1 = "${temp_user}_test1"
            println("compare is: "+compare1)
+           assert "$rg" instanceof String 
+           assert "$compare1" instanceof String
            if(rg.equalsIgnoreCase(compare1)) {
              println("rg is :"+ rg )
              println("temp_user is:"+ temp_user)
