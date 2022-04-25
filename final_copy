@@ -69,6 +69,8 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
        sshagent(["${temp_user}"]){
          script{
            try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} helm delete azure-arc --no-hooks"
+             sleep 10
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
            }catch(error){
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az group create --name ${temp_user}_arc --location EastUS --output table"
