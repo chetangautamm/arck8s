@@ -1,7 +1,7 @@
 ---
 block:
   message: "First Site"
-  ip: "20.193.238.113"
+  ip: "20.219.149.176"
   username: "kubeadm"
   password: "kubeadm@1234"
 
