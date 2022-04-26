@@ -130,6 +130,23 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
           }
         }
     }
+
+    stage("Deploy Opensips:${temp_user}") {
+        sshagent(["${temp_user}"]) {
+          script {
+            try {
+              sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q opensips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
+              sh "sleep 2"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} kubectl apply -f opensips.yaml"
+            }catch(error){
+              sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q opensips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
+              sh "sleep 2"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} kubectl apply -f opensips.yaml"
+            }
+          }
+        }
+      }
+}
  
 node {  
 

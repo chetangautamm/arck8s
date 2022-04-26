@@ -2,7 +2,7 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
     echo "inside tstage :${temp_user}"
     echo "inside tstage :${temp_pass}"
     echo "inside tstage :${temp_ip}"
-    temp_ctr= temp_ctr+1
+    temp_ctr= temp_ctr
     //Stage for addition of k8s cluster on arc
 
     stage("Azure Cli:${temp_user}"){
@@ -16,6 +16,16 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
          }
       }
    }
+
+   stage("Login Azure:${temp_user}"){
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az login --service-principal -u 1471aa7b-4655-4819-83bc-c52f97ccb68a -p Su87Q~toU_wq10kDaTSxBf1EF7bPHgYzrpdyf --tenant cb1d2f78-9e60-4a54-af15-ae11c5410d4c"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az login --service-principal -u 1471aa7b-4655-4819-83bc-c52f97ccb68a -p Su87Q~toU_wq10kDaTSxBf1EF7bPHgYzrpdyf --tenant cb1d2f78-9e60-4a54-af15-ae11c5410d4c"
+           }
+         }
+      }
 
 
    stage("Connectedk8s Extension:${temp_user}"){
@@ -108,24 +118,22 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
        }
      }
 
-   
-
-   stage("Deploy Opensips:${temp_user}") {
-        sshagent(["${temp_user}"]) {
+     stage("Deploy Opensips:${temp_user}") {
           script {
             try {
-              sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q opensips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
-              sh "sleep 2"
-              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} kubectl apply -f opensips.yaml"
+              sh "sleep 5"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az k8s-configuration create --name cluster-config --cluster-name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc --operator-instance-name cluster-config --operator-namespace cluster-config --repository-url https://github.com/chetangautamm/arck8s.git --scope cluster --cluster-type connectedClusters --git-branch worker"
             }catch(error){
-              sh "sshpass -p ${temp_pass} scp -o StrictHostKeyChecking=no -q opensips.yaml ${temp_user}@${temp_ip}:/home/${temp_user}/"
-              sh "sleep 2"
-              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} kubectl apply -f opensips.yaml"
+              sh "sleep 5"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az k8s-configuration create --name cluster-config --cluster-name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc --operator-instance-name cluster-config --operator-namespace cluster-config --repository-url https://github.com/chetangautamm/arck8s.git --scope cluster --cluster-type connectedClusters --git-branch worker"
             }
           }
         }
-      }
-}
+    }
+
+   
+
+   
  
 node {  
 

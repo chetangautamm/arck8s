@@ -1,16 +1,18 @@
 ---
 block:
   message: "First Site"
-  ip: "20.219.149.176"
-  username: "kubeadm"
-  password: "kubeadm@1234"
+  ip: "52.172.221.4"
+  username: "k8suser"
+  password: "Kubernetes@1234"
 
 ---
 block:
   message: "Second Site"
-  ip: "52.172.221.4"
-  username: "k8suser"
-  password: "Kubernetes@1234"
+  ip: "20.219.30.37"
+  username: "kubeadm"
+  password: "kubeadm@1234"
+
+
 
 
 
