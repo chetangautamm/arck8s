@@ -32,7 +32,6 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
        sshagent(["${temp_user}"]){
          script{
            try{
-             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az config set extension.use_dynamic_install=yes_without_prompt"
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az extension add --name connectedk8s"
            }catch(error){
              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az extension add --name connectedk8s"
