@@ -21,10 +21,10 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
           script {
             try {
               sh "sleep 20"
-              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az k8s-configuration create --name cluster-config --cluster-name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc --operator-instance-name cluster-config --operator-namespace cluster-config --repository-url http://3.108.25.127/chetan/multicloud.git --scope cluster --cluster-type connectedClusters --operator-params='--git-branch=gitops'"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az k8s-configuration create --name cluster-config --cluster-name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc --operator-instance-name cluster-config --operator-namespace cluster-config --repository-url https://github.com/chetangautamm/arck8s.git --scope cluster --cluster-type connectedClusters --operator-params='--git-branch=gitops'"
             }catch(error){
               sh "sleep 5"
-              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az k8s-configuration create --name cluster-config --cluster-name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc --operator-instance-name cluster-config --operator-namespace cluster-config --repository-url http://3.108.25.127/chetan/multicloud.git --scope cluster --cluster-type connectedClusters --operator-params='--git-branch=gitops'"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az k8s-configuration create --name cluster-config --cluster-name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc --operator-instance-name cluster-config --operator-namespace cluster-config --repository-url https://github.com/chetangautamm/arck8s.git --scope cluster --cluster-type connectedClusters --operator-params='--git-branch=gitops'"
             }
           }
         }
