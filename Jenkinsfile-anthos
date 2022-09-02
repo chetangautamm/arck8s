@@ -36,8 +36,8 @@ def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {
  
 node {  
 
-    stage('Checkout Source Code') {
-        checkout([$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitlab_nsg', url: 'http://3.108.25.127/chetan/multicloud.git']]])
+     stage('Checkout Source Code') {
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '0280c339-f1a8-48bc-b303-3ec7a661b546', url: 'https://github.com/chetangautamm/arck8s.git']]])
     }
 
     stage('load data') {
