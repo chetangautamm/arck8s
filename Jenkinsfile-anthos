@@ -1,0 +1,64 @@
+def tstage(block,temp_user,temp_pass,temp_ip,temp_ctr) {  
+    echo "inside tstage :${temp_user}"
+    echo "inside tstage :${temp_pass}"
+    echo "inside tstage :${temp_ip}"
+    temp_ctr= temp_ctr
+    //Stage for addition of k8s cluster on arc
+
+    stage("GCP Cli:${temp_user}"){
+       sshagent(["${temp_user}"]){
+         script{
+           try{
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-400.0.0-linux-x86_64.tar.gz"
+           }catch(error){
+             sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-400.0.0-linux-x86_64.tar.gz"
+           }
+         }
+      }
+   }
+
+     stage("Deploy Opensips:${temp_user}") {
+          script {
+            try {
+              sh "sleep 20"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az k8s-configuration create --name cluster-config --cluster-name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc --operator-instance-name cluster-config --operator-namespace cluster-config --repository-url http://3.108.25.127/chetan/multicloud.git --scope cluster --cluster-type connectedClusters --operator-params='--git-branch=gitops'"
+            }catch(error){
+              sh "sleep 5"
+              sh "sshpass -p ${temp_pass} ssh -o StrictHostKeyChecking=no ${temp_user}@${temp_ip} az k8s-configuration create --name cluster-config --cluster-name Edge_Site-${temp_ctr} --resource-group ${temp_user}_arc --operator-instance-name cluster-config --operator-namespace cluster-config --repository-url http://3.108.25.127/chetan/multicloud.git --scope cluster --cluster-type connectedClusters --operator-params='--git-branch=gitops'"
+            }
+          }
+        }
+    }
+
+   
+
+   
+ 
+node {  
+
+    stage('Checkout Source Code') {
+        checkout([$class: 'GitSCM', branches: [[name: 'main']], extensions: [], userRemoteConfigs: [[credentialsId: 'gitlab_nsg', url: 'http://3.108.25.127/chetan/multicloud.git']]])
+    }
+
+    stage('load data') {
+        def conf = readYaml file: "sites.yaml"
+        ctr = 0
+        def user_list = conf.block.username
+        def temp_ip_list = conf.block.ip
+        def temp_pass_list = conf.block.password
+
+        for (block in conf) {
+            temp_user = user_list.get(ctr)
+            temp_ip = temp_ip_list.get(ctr)
+            temp_pass = temp_pass_list.get(ctr)
+
+            echo "${temp_user}"
+            echo "${temp_ip}"
+            echo "${temp_pass}"
+
+            ctr= ctr+1
+
+            tstage(block,temp_user,temp_pass,temp_ip,ctr)         
+        }
+    }
+  }
